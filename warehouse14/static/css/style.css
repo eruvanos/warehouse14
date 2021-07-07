@@ -1,0 +1,37 @@
+/* Own Style */
+ul > li.metadata-list-item {
+    margin-left: 2rem;
+    list-style-type: circle;
+}
+
+.code-block {
+    display: block;
+    padding: 15px;
+    margin-bottom: 15px;
+    word-break: break-all;
+    direction: ltr;
+
+    font-family: Source Code Pro,monospace;
+    background-color: #f9f9f9;
+    border: 1px solid #d3d3d3;
+    font-size: .85rem;
+    color: #6c6c6c;
+}
+
+/* Utils */
+.mt-m {
+    margin-top: 5rem;
+}
+
+.ml-s {
+    margin-left: 3rem;
+}
+
+.mr-s {
+    margin-right: 3rem;
+}
+
+/* Overwrites */
+.collection .collection-item.avatar {
+    min-height: 62px;
+}

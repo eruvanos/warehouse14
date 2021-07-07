@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% set active_page = 'account' %}
+
+{% block title %}Home{% endblock %}
+
+{% block nav_content %}
+    <div class="nav-content">
+        <ul class="tabs tabs-transparent">
+            <li class="tab"><a class="active" href="{{ url_for('account') }}#1">Account Settings</a></li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% set account = current_user.account %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <h2>API Token</h2>
+        </div>
+
+        {% if token_raw %}
+            <h5>Token for "{{ new_token.name }}"</h5>
+            <div class="row">
+                <div class="col s12">
+                    <code class="code-block">
+                        {{ token_raw }}
+                    </code>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <div class="card-panel red darken-3"><span class="white-text">
+                       For security reasons this token will only appear once. Copy it now.
+                    </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <h5>Using this token</h5>
+            <p>To use this API token:</p>
+            <ul>
+                <li>Set your username to <code>__token__</code></li>
+                <li>Set your password to the token value, including the
+                    <code>sr-pypi-</code> prefix
+                </li>
+            </ul>
+
+            <p>
+                For example, if you are using <a href="https://pypi.org/project/twine/">Twine</a> to upload your
+                projects to PyPI, set up your <code>$HOME/.pypirc</code> file like this:
+            </p>
+
+            <pre class="code-block">
+[distutils]
+  index-servers =
+    pypi
+    stockroom
+    PROJECT_NAME
+
+[stockroom]
+  username = __token__
+  password = # either a user-scoped token or a project-scoped token you want to set as the default
+
+[PROJECT_NAME]
+  repository = {{ url_for('simple.simple_index') }}
+  username = __token__
+  password = {{ token_raw }}
+            </pre>
+
+            <p>
+                You can then use <code>twine --repository PROJECT_NAME</code> to switch to the correct token when
+                uploading to PyPI.
+            </p>
+            <p>For further instructions on how to use this token, visit the PyPI help page.</p>
+
+            <div class="divider"></div>
+
+        {% else %}
+            <form method="POST">
+                {{ create_form.hidden_tag() }}
+
+                <div class="row">
+                    <h5>Create an API token</h5>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        {{ create_form.name(size=20) }}
+                        {{ create_form.name.label }}
+                    </div>
+                </div>
+                <button class="btn waves-effect waves-light col s2 offset-s4 white-text" type="submit" name="action">
+                    Create
+                    <i class="material-icons right">send</i>
+                </button>
+            </form>
+        {% endif %}
+    </div>
+
+{% endblock %}

@@ -1,0 +1,59 @@
+[tool.poetry]
+name = "warehouse14"
+version = "0.1.0"
+description = "A PyPI implementation for closed groups with authentication only"
+readme="README.md"
+homepage="https://github.com/eruvanos/warehouse14"
+repository="https://github.com/eruvanos/warehouse14"
+keywords=["pypi"]
+packages = [
+    { include = "warehouse14" },
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Framework :: Flask",
+    "Topic :: Software Development",
+    "Topic :: System :: Software Distribution",
+]
+authors = ["Maic Siemering <maic@siemering.tech>"]
+license = "MIT"
+
+[tool.poetry.urls]
+"Issue Tracker" = "https://github.com/eruvanos/warehouse14/issues"
+"Roadmap" = "https://github.com/eruvanos/warehouse14/projects/1"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+Flask = "^2.0.1"
+Flask-Login = "^0.5.0"
+Flask-HTTPAuth = "^4.4.0"
+Authlib = "^0.15.4"
+pypitoken = "^3.0.2"
+readme-renderer = {extras = ["md"], version = "^29.0"}
+Flask-Markdown = "^0.3"
+pydantic = "^1.8.2"
+Flask-WTF = "^0.15.1"
+
+[tool.poetry.dev-dependencies]
+pyppeteer = "^0.2.5"
+pytest = "^6.2.4"
+pytest-asyncio = "^0.15.1"
+mirakuru = "^2.4.1"
+requests-html = "^0.10.0"
+moto = "^2.0.10"
+freezegun = "^1.1.0"
+black = "^21.6b0"
+boto3 = "^1.17.105"
+requests-wsgi-adapter = "^0.4.1"
+boto3-stubs = {extras = ["s3", "dynamodb"], version = "^1.17.105"}
+
+[tool.poetry.extras]
+aws = ["boto3"]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

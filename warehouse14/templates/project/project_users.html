@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% set active_page = 'projects' %}
+
+{% block title %}Home{% endblock %}
+
+
+{% block nav_content %}
+    <div class="nav-content">
+        <ul class="tabs tabs-transparent">
+            <li class="tab"><a class=""
+                               href="{{ url_for('edit_project', project_name=project.normalized_name()) }}">Project</a></li>
+            <li class="tab"><a class="active" href="{{ url_for('project_users', project_name=project.normalized_name()) }}">Users</a></li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col s12">
+                <div class="row">
+                    <h2>Admins</h2>
+                    <ul class="collection">
+                        {% for admin in project.admins %}
+                            <li class="collection-item">
+                                <div>
+                                    {{ admin }}
+                                    <a
+                                            href="{{ url_for('project_remove_admin', project_name=project.name, username=admin) }}"
+                                            class="secondary-content"><i class="material-icons">delete</i></a>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="row">
+                    <form action="{{ url_for('project_add_admin', project_name=project.name) }}" method="POST">
+                        <input type="text" name="username" class="col s11">
+                        <button type="submit" class="waves-effect waves-teal btn col s1 white-text"><i class="material-icons">add</i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col s12">
+                <div class="row">
+                    <h2>Members</h2>
+                    <ul class="collection">
+                        {% for member in project.members %}
+                            <li class="collection-item">
+                                <div>
+                                    {{ member }}
+                                    <a
+                                            href="{{ url_for('project_remove_member', project_name=project.name, username=member) }}"
+                                            class="secondary-content"><i class="material-icons">delete</i></a>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="row">
+                    <form action="{{ url_for('project_add_member', project_name=project.name) }}" method="POST">
+                        <input type="text" name="username" class="col s11">
+                        <button type="submit" class="waves-effect waves-teal btn col s1 white-text"><i class="material-icons">add</i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+{% endblock %}

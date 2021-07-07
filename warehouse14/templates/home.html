@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% set active_page = 'home' %}
+
+{% block content %}
+
+    <div class="container">
+        <h1>Home</h1>
+
+        <p class="important">
+            Welcome to our internal Python Package Index.
+            You can search for inner source libraries or share your own.
+        </p>
+        <p class="important">
+            For team internal libraries, you can keep your packages secret.
+            Names of private packages are reserved in case you want to make them public at some point in time.
+        </p>
+        <p class="important">
+            The <a href="https://www.python.org/dev/peps/pep-0423/#top-level-namespace-relates-to-code-ownership">PEP 423</a>
+            explains a few rules about ownership. In short packages owned by a company, even if they are stored in private repositories,
+            they should live within a namespace. This is not only a nice thing to have, but it also provides a few security benefits.
+        </p>
+        <p class="important">
+            Place your package within an appropriate namespace!
+        </p>
+    </div>
+
+
+
+
+
+
+
+{% endblock %}

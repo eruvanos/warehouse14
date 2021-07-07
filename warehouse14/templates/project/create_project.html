@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% set active_page = 'projects' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <h1>Create Projectsitory</h1>
+
+        <form method="POST" action="#">
+            {{ form.csrf_token }}
+
+            <div class="row">
+                <div class="input-field col s6">
+                    {{ form.name(size=20) }}
+                    {{ form.name.label }}
+                </div>
+            </div>
+
+            <div class="row">
+                {% for mode in form.public %}
+                    <div class="col s3">
+                        <label>
+                            {{ mode }}
+                            <span>{{ mode.label.text }}</span>
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="row">
+                <button class="btn waves-effect waves-light col s2 offset-s4 white-text" type="submit" name="action">Create
+                    <i class="material-icons right">send</i>
+                </button>
+            </div>
+
+        </form>
+
+
+    </div>
+
+
+
+
+
+
+
+{% endblock %}

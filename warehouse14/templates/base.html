@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+<head>
+    {% block head %}
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/materialize.min.css') }}"
+              media="screen,projection"/>
+        <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"
+              media="screen,projection"/>
+        <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/pygments.css') }}"
+              media="screen,projection"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+        <title>{% block title %}Warehouse14{% endblock %}</title>
+    {% endblock %}
+</head>
+<body>
+{#<div class="container">#}
+
+<nav class="nav-extended">
+    <ul id="user-dropdown" class="dropdown-content">
+        <li><a href="{{ url_for('account') }}">Account</a></li>
+        <li><a href="{{ url_for('logout') }}">Logout</a></li>
+    </ul>
+
+    <div class="nav-wrapper">
+        <a href="#" class="brand-logo center">Warehouse14</a>
+        <ul id="nav-mobile" class="right">
+            <li><a class="dropdown-trigger" href="#" data-target="user-dropdown">{{ current_user.account.name }}<i
+                    class="material-icons right">arrow_drop_down</i></a></li>
+        </ul>
+        <ul id="nav-mobile" class="left">
+            <li class="{{ 'active' if active_page == 'home' }}"><a href="/">Home</a></li>
+            <li class="{{ 'active' if active_page == 'projects' }}"><a
+                    href="{{ url_for('list_projects') }}">Projects</a></li>
+        </ul>
+    </div>
+    {% block nav_content %}{% endblock %}
+</nav>
+
+<div id="content">
+    {% block content %}{% endblock %}
+</div>
+<div id="footer">
+    {% block footer %}
+    {% endblock %}
+</div>
+
+{#</div>#}
+
+{#<script src="https://unpkg.com/htmx.org@1.4.0"></script>#}
+<script type="text/javascript" src="{{ url_for('static', filename='js/materialize.min.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var elems = document.querySelectorAll('.dropdown-trigger');
+        M.Dropdown.init(elems, {});
+    });
+</script>
+</body>
+</html>

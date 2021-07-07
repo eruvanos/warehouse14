@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% set active_page = 'projects' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <h1>Projects</h1>
+
+        <p class="important">
+            Click on a project to access the resources
+        </p>
+
+        <div class="divider"></div>
+
+        <ul id="projects" class="collection">
+            {% for project in projects %}
+                <a href="{{ url_for('show_project', project_name=project.normalized_name()) }}" class="collection-item avatar project">
+                        <i class="material-icons medium circle">inbox</i>
+                        <span class="title">{{ project.name }}</span>
+                        <p>
+                            {{ project.latest_version.summary|sn }}
+                        </p>
+                </a>
+            {% endfor %}
+        </ul>
+
+
+        <div class="fixed-action-btn">
+            <a
+                    id="create-project-btn"
+                    class="btn-floating btn-large waves-effect waves-light red"
+                    href="{{ url_for('create_project') }}"
+            ><i class="material-icons">add</i></a>
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+{% endblock %}

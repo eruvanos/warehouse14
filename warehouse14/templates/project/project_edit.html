@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% set active_page = 'projects' %}
+
+{% block title %}Home{% endblock %}
+
+
+{% block nav_content %}
+    <div class="nav-content">
+        <ul class="tabs tabs-transparent">
+            <li class="tab"><a class="active"
+                               href="{{ url_for('edit_project', project_name=project.normalized_name()) }}">Project</a></li>
+            <li class="tab"><a class="" href="{{ url_for('project_users', project_name=project.normalized_name()) }}">Users</a></li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col s8">
+                <h2>Edit {{ project.name|upper }}</h2>
+
+                <form method="POST" action="#">
+                    {{ form.csrf_token }}
+                    <div class="row">
+                        <div class="input-field col s12">
+                            {{ form.name(size=20) }}
+                            {{ form.name.label }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        {% for mode in form.public %}
+                            <div class="col s3">
+                                <label>
+                                    {{ mode }}
+                                    <span>{{ mode.label.text }}</span>
+                                </label>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="row">
+                        <div class="col offset-s10">
+                            <button class="btn waves-effect waves-light white-text" type="submit" name="action">Save
+                                <i class="material-icons right">send</i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

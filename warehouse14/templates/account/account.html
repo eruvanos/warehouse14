@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% set active_page = 'account' %}
+
+{% block title %}Home{% endblock %}
+
+{% block nav_content %}
+    <div class="nav-content">
+        <ul class="tabs tabs-transparent">
+            <li class="tab"><a class="active" href="{{ url_for('account') }}">Account Settings</a></li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% set account = current_user.account %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <h2>Account</h2>
+        </div>
+
+        <div class="row">
+            <div class="col s12">
+                <h4>API Tokens</h4>
+                {% if tokens %}
+                    <ul class="collection">
+                        {% for token_id, token_name in tokens %}
+                            <li class="collection-item">
+                                <span>{{ token_name }}</span>
+                                <a href="{{ url_for("account_token_delete", token_id=token_id) }}"
+                                   class="secondary-content">
+                                    <i class="material-icons">delete</i>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="row">
+                <a class="btn right" href="{{ url_for('account_token') }}">Add API token</a>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% set active_page = 'project' %}
+
+{% block title %}Home{% endblock %}
+
+{% block nav_content %}
+    <div class="nav-content red darken-4">
+        <code class="nav-title ml-s">pip install {{ project.name }}</code>
+
+        {#  Show edit button  #}
+        {% if project.is_admin(current_user.account.name) %}
+            <a
+                    id="edit-project-btn"
+                    class="btn-floating btn-large halfway-fab waves-effect waves-light teal"
+                    href="{{ url_for('edit_project', project_name=project.name) }}">
+                <i class="material-icons">edit</i>
+            </a>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block content %}
+
+    {% if project.latest_version %}
+        <div class="container">
+            <div class="row">
+                <div class="col m3">
+                    <div class="section">
+                        <h5>Latest Version</h5>
+                        <p>{{ project.latest_version.version }}</p>
+                        <div class="divider"></div>
+
+                        {% if project.latest_version.author %}
+                            <h5>Author</h5>
+                            <p>{{ project.latest_version.author }}</p>
+                            <div class="divider"></div>
+                        {% endif %}
+
+                        {% if project.latest_version.maintainer %}
+                            <h5>Maintainer</h5>
+                            <p>{{ project.latest_version.maintainer }}</p>
+                            <div class="divider"></div>
+                        {% endif %}
+
+                        {% if urls %}
+                            <h5>Project Links</h5>
+                            <ul>
+                                {% for name, url in urls %}
+                                    <li class="metadata-list-item"><a href="{{ url }}">{{ name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                            <div class="divider"></div>
+                        {% endif %}
+
+                        {% if grouped_classifiers %}
+                            <h5>Classifiers</h5>
+                            {% for group, classifiers in grouped_classifiers.items() %}
+                                <h6>{{ group }}</h6>
+                                <ul>
+                                    {% for classifier in classifiers %}
+                                        <li class="metadata-list-item">{{ classifier }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endfor %}
+                            <div class="divider"></div>
+                        {% endif %}
+
+                    </div>
+                </div>
+                <div class="col m9">
+                    <div class="row">
+                        <h1>{{ project.name }}</h1>
+                    </div>
+                    <div class="row">{{ project.latest_version.summary }}</div>
+
+                    <div class="divider"></div>
+                    <div class="row">{{ readme | safe }}</div>
+                </div>
+            </div>
+
+
+        </div>
+
+    {% else %}
+        <div class="container">
+            <div class="card-panel amber lighten-4">
+                <p class="flow-text">The author did not upload any content yet.</p>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}
