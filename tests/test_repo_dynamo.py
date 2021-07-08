@@ -89,6 +89,22 @@ def test_account_token_list_returns_saved_token(table):
 
 
 @freeze_time("2021-06-20 10:00:00")
+def test_account_token_delete_removes_token(table):
+    repo = DynamoDBBackend(table)
+    repo.account_save("userX")
+    repo.account_token_add(
+        user_id="userX",
+        token_id="1",
+        name="token1",
+        key="secret",
+    )
+
+    repo.account_token_delete("userX", "1")
+
+    actual_tokens = repo.account_token_list("userX")
+    assert len(actual_tokens) == 0
+
+@freeze_time("2021-06-20 10:00:00")
 def test_resolve_token_returns_an_account(table):
     repo = DynamoDBBackend(table)
     repo.account_save("userX")

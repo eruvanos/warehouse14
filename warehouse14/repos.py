@@ -35,7 +35,7 @@ class DBBackend(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def account_token_delete(self, account_id: str):
+    def account_token_delete(self, account_id: str, token_id: str):
         raise NotImplementedError()
 
     @abstractmethod

@@ -121,8 +121,13 @@ class DynamoDBBackend(DBBackend):
             for item in items
         ]
 
-    def account_token_delete(self, account_id: str):
-        raise NotImplementedError()
+    def account_token_delete(self, account_id: str, token_id: str):
+        self._table.delete_item(
+            Key={
+                "pk": f"account#{account_id}",
+                "sk": f"token#{token_id}",
+            }
+        )
 
     def resolve_token(self, token_id: str) -> Optional[Account]:
         """
