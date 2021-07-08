@@ -69,7 +69,7 @@ def create_blueprint(
         :return: username
         """
         try:
-            if username != "__token__":
+            if username and username != "__token__":
                 abort(
                     401,
                     "API access requires basic auth via ('__token__', '<your api token>')",

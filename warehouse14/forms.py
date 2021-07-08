@@ -4,7 +4,7 @@ from wtforms.validators import DataRequired
 
 
 class CreateProjectForm(FlaskForm):
-    name = StringField("Projectsitory Name", validators=[DataRequired()])
+    name = StringField("Project Name", validators=[DataRequired()])
     public = RadioField(
         "Mode", choices=[(False, "Private"), (True, "Public")], default=False
     )

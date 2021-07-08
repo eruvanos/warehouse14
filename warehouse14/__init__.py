@@ -30,7 +30,7 @@ _RENDERERS = {
 
 
 def create_app(
-    db: DBBackend, storage: PackageStorage, auth: Authenticator, config: dict = None
+    db: DBBackend, storage: PackageStorage, auth: Authenticator, config: dict = None, allow_project_creation=False
 ):
     app = Flask(__name__)
     if config:
@@ -52,7 +52,7 @@ def create_app(
     auth.init_app(app)
 
     simple_blueprint = simple_api.create_blueprint(
-        db, storage, allow_project_creation=True
+        db, storage, allow_project_creation=allow_project_creation
     )
     app.register_blueprint(simple_blueprint)
 
@@ -125,10 +125,7 @@ def create_app(
     @login_required
     def account_token_delete():
         token_id = request.args.get("token_id")
-        for token in g.account.tokens:
-            if token.id == token_id:
-                db.account_token_delete(token.id)
-                break
+        db.account_token_delete(get_user_id(), token_id)
         return redirect(url_for("account"))
 
     @app.get("/projects")
@@ -242,6 +239,8 @@ def create_app(
         print(request.form["username"])
         project = db.project_get(project_name)
         project.admins.append(request.form["username"])
+
+        db.project_save(project)
         return redirect(url_for("project_users", project_name=project_name))
 
     @app.get("/projects/<project_name>/admins/<username>")
@@ -252,6 +251,7 @@ def create_app(
         # Never delete the last admin!
         if len(project.admins) > 1 and username in project.admins:
             project.admins.remove(username)
+        db.project_save(project)
         return redirect(url_for("project_users", project_name=project_name))
 
     @app.post("/projects/<project_name>/members")
@@ -260,6 +260,7 @@ def create_app(
         print(request.form["username"])
         project = db.project_get(project_name)
         project.members.append(request.form["username"])
+        db.project_save(project)
         return redirect(url_for("project_users", project_name=project_name))
 
     @app.get("/projects/<project_name>/users/<username>")
@@ -268,6 +269,7 @@ def create_app(
         project = db.project_get(project_name)
         if username in project.members:
             project.members.remove(username)
+        db.project_save(project)
         return redirect(url_for("project_users", project_name=project_name))
 
     return app
