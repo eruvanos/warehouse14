@@ -37,6 +37,7 @@ readme-renderer = {extras = ["md"], version = "^29.0"}
 Flask-Markdown = "^0.3"
 pydantic = "^1.8.2"
 Flask-WTF = "^0.15.1"
+requests = "^2.25.1"
 
 [tool.poetry.dev-dependencies]
 pyppeteer = "^0.2.5"
