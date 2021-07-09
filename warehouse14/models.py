@@ -104,15 +104,15 @@ class Account(BaseModel):
 
 
 class Project(BaseModel):
-    name: str
-    # created: datetime.datetime
-    # updated: datetime.datetime
+    # Primary key
+    def normalized_name(self) -> str:
+        """Perform PEP 503 normalization"""
+        return Project.normalize_name(self.name)
 
+    name: str
     admins: List[str] = []
     members: List[str] = []
     public: bool = False
-
-    # files: Set[str] = set()
     versions: Dict[str, Version] = {}
 
     @property
@@ -136,10 +136,6 @@ class Project(BaseModel):
     def is_admin(self, user: str):
         return user in self.admins
 
-    def normalized_name(self) -> str:
-        """Perform PEP 503 normalization"""
-        return Project.normalize_name(self.name)
-
     def normalized_name_for_url(self) -> str:
         """Perform PEP 503 normalization and ensure the value is safe for URLs."""
         return quote(self.normalized_name())
@@ -148,7 +144,6 @@ class Project(BaseModel):
     def normalize_name(name: str) -> str:
         """Perform PEP 503 normalization"""
         return re.sub(r"[-_.]+", "-", name).lower()
-
 
 # class DB(ABC):
 #     def get_project(self, name: str) -> Optional[Project]:

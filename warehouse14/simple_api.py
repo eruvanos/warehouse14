@@ -70,10 +70,7 @@ def create_blueprint(
         """
         try:
             if username and username != "__token__":
-                abort(
-                    401,
-                    "API access requires basic auth via ('__token__', '<your api token>')",
-                )
+                return None
 
             token = Token.load(password)
             account = db.resolve_token(token.identifier)
@@ -97,7 +94,7 @@ def create_blueprint(
     def simple_index():
         usern_name = token_auth.current_user()
         links = sorted(
-            p.normalized_name() for p in db.project_list() if p.visible(usern_name)
+            (p.name, p.normalized_name()) for p in db.project_list() if p.visible(usern_name)
         )
         return render_template("simple/simple.html", links=links)
 

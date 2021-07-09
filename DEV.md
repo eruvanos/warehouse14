@@ -10,14 +10,26 @@ pygmentize -f html -S default>app/static/css/pygments.css
 ## API specs
 
 * [PEP 503 -- Simple Repository API](https://www.python.org/dev/peps/pep-0503/)
-* [Upload](https://warehouse.pypa.io/api-reference/legacy.html#upload-api)
+* [PEP 508 -- Dependency specification for Python Software Packages](https://www.python.org/dev/peps/pep-0508/)
+* [Upload API](https://warehouse.pypa.io/api-reference/legacy.html#upload-api)
+* [PEP 427 -- The Wheel Binary Package Format 1.0](https://www.python.org/dev/peps/pep-0427/#file-name-convention)
+* [PEP 423 -- Naming conventions and recipes related to packaging](https://www.python.org/dev/peps/pep-0423/)
+* [PEP 517 -- A build-system independent format for source trees](https://www.python.org/dev/peps/pep-0517/)
 * [PEP 241 -- Metadata for Python Software Packages](https://www.python.org/dev/peps/pep-0241/)
 * [PEP 314 -- Metadata for Python Software Packages 1.1](https://www.python.org/dev/peps/pep-0314/)
 * [PEP 345 -- Metadata for Python Software Packages 1.2](https://www.python.org/dev/peps/pep-0345/)
 * [PEP 426 -- Metadata for Python Software Packages 2.0](https://www.python.org/dev/peps/pep-0426/)
 * [PEP 566 -- Metadata for Python Software Packages 2.1](https://www.python.org/dev/peps/pep-0566/)
 
+### Package names
+The current Python packaging landscape is full of historical grown specifications (PEP) and implementation details
+of the former PyPI (Cheese shop). In the following sections some design decisions will be explained.
 
+The allowed characters for a package name are defined in [PEP 508](https://www.python.org/dev/peps/pep-0508/#names)
+which are ....
+The simple API normalizes package following [PEP 503](https://www.python.org/dev/peps/pep-0503/#normalized-names) `re.sub(r"[-_.]+", "-", name).lower()`
+
+For that reason `example-pkg`, `example.pkg`, `example+pkg` and `pkg_example` are the same. 
 
 ## Implementation details
 

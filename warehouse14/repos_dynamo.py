@@ -153,7 +153,9 @@ class DynamoDBBackend(DBBackend):
 
     # Project methods
     def project_save(self, project: Project) -> Project:
-        current = self.project_get(project.name)
+        normalized_name = project.normalized_name()
+
+        current = self.project_get(normalized_name)
 
         # calc admins diff
         current_admins = set(current.admins) if current else set()
@@ -172,8 +174,8 @@ class DynamoDBBackend(DBBackend):
             # update project entry
             w.put_item(
                 Item={
-                    "pk": f"project#{project.name}",
-                    "sk": f"project#{project.name}",
+                    "pk": f"project#{normalized_name}",
+                    "sk": f"project#{normalized_name}",
                     "name": project.name,
                     "versions": {
                         k: json.loads(v.json()) for k, v in project.versions.items()
@@ -185,7 +187,7 @@ class DynamoDBBackend(DBBackend):
             if project.public:
                 w.put_item(
                     Item={
-                        "pk": f"project#{project.name}",
+                        "pk": f"project#{normalized_name}",
                         "sk": f"account#public",
                         "role": "member",
                     }
@@ -193,7 +195,7 @@ class DynamoDBBackend(DBBackend):
             else:
                 w.delete_item(
                     Key={
-                        "pk": f"project#{project.name}",
+                        "pk": f"project#{normalized_name}",
                         "sk": f"account#public",
                     }
                 )
@@ -202,7 +204,7 @@ class DynamoDBBackend(DBBackend):
             for admin in to_create_admins:
                 w.put_item(
                     Item={
-                        "pk": f"project#{project.name}",
+                        "pk": f"project#{normalized_name}",
                         "sk": f"account#{admin}",
                         "name": admin,
                         "role": "admin",
@@ -211,7 +213,7 @@ class DynamoDBBackend(DBBackend):
             for admin in to_delete_admins:
                 w.delete_item(
                     Key={
-                        "pk": f"project#{project.name}",
+                        "pk": f"project#{normalized_name}",
                         "sk": f"account#{admin}",
                     }
                 )
@@ -220,7 +222,7 @@ class DynamoDBBackend(DBBackend):
             for member in to_create_members:
                 w.put_item(
                     Item={
-                        "pk": f"project#{project.name}",
+                        "pk": f"project#{normalized_name}",
                         "sk": f"account#{member}",
                         "name": member,
                         "role": "member",
@@ -229,16 +231,18 @@ class DynamoDBBackend(DBBackend):
             for member in to_delete_members:
                 w.delete_item(
                     Key={
-                        "pk": f"project#{project.name}",
+                        "pk": f"project#{normalized_name}",
                         "sk": f"account#{member}",
                     }
                 )
 
-        return self.project_get(project.name)
+        return self.project_get(normalized_name)
 
     def project_get(self, name: str) -> Optional[Project]:
+        normalized_name=Project.normalize_name(name)
+
         items = self._table.query(
-            KeyConditionExpression=Key("pk").eq(f"project#{name}")
+            KeyConditionExpression=Key("pk").eq(f"project#{normalized_name}")
         ).get("Items", [])
 
         db_project = None
@@ -274,10 +278,10 @@ class DynamoDBBackend(DBBackend):
         """
         # TODO this will explode,
         # we have to scan the whole DB and do additional requests per project
+        # we should lookup by the index for a specific user, using a paginator!
         items = self._table.scan(
             FilterExpression=Key("pk").begins_with(f"project#")
             & Key("sk").begins_with("project#"),
-            # ProjectionExpression="name"
         ).get("Items", [])
 
         return [self.project_get(p["name"]) for p in items]

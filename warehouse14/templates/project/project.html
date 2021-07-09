@@ -5,7 +5,8 @@
 
 {% block nav_content %}
     <div class="nav-content red darken-4">
-        <code class="nav-title ml-s">pip install {{ project.name }}</code>
+        <code class="nav-title ml-s">pip install
+            -i {{ url_for("simple.simple_index", _external=True) }} {{ project.normalized_name() }}</code>
 
         {#  Show edit button  #}
         {% if project.is_admin(current_user.account.name) %}
@@ -82,11 +83,38 @@
         </div>
 
     {% else %}
-        <div class="container">
-            <div class="card-panel amber lighten-4">
-                <p class="flow-text">The author did not upload any content yet.</p>
+        {% if project.is_admin(current_user.account.name) %}
+            <div class="container">
+                <div class="row">
+                    <h1>{{ project.name }}</h1>
+                </div>
+                <div class="row">
+                    <div class="card-panel amber lighten-4">
+                        <p class="flow-text">
+                            You can upload new versions to {{ url_for("simple.simple_index", _external=True) }}.
+                        </p>
+
+                        <ol>
+                            <li>Create an API token under your account settings</li>
+                            <li>
+                                Configure your preferred tool to upload
+                                <ul style="list-style: circle">
+                                    <li><a href="https://python-poetry.org/docs/repositories/#using-a-private-repository">Poetry</a></li>
+                                    <li><a href="https://twine.readthedocs.io/en/latest/#configuration">Twine</a></li>
+                                </ul>
+                            </li>
+                            <li>Upload your first version 🎉</li>
+                        </ol>
+                    </div>
+                </div>
             </div>
-        </div>
+        {% else %}
+            <div class="container">
+                <div class="card-panel amber lighten-4">
+                    <p class="flow-text">The author did not upload any content yet.</p>
+                </div>
+            </div>
+        {% endif %}
     {% endif %}
 
 {% endblock %}

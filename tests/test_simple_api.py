@@ -50,10 +50,10 @@ def given_account_exists_with_api_key(db: DBBackend):
         user_id="userX", token_id="token-id", name="", key="sec"
     )
     api_key = pypitoken.Token.create(
-        domain="stockroom",
+        domain="warehouse14",
         identifier=token.id,
         key=token.key,
-        prefix="stock",
+        prefix="wh14",
     ).dump()
     return account, api_key
 
@@ -168,6 +168,30 @@ def test_index_lists_projects_regarding_access(app, html_client, db, storage):
     assert res.html.links == {"public-project/", "admin-project/", "member-project/"}
 
 
+def test_index_list_files_with_normalized_name(app, html_client, db, storage):
+    account, api_key = given_account_exists_with_api_key(db)
+    given_project_with_file(db, storage, project_name="ex.example-pkg_some",public=True)
+
+    res = html_client.get(
+        "http://localhost/simple/", auth=("__token__", api_key)
+    )
+
+    assert res.status_code == 200
+    link = res.html.find("a")[0]
+    assert link.text == "ex.example-pkg_some"
+    assert link.attrs["href"] == "ex-example-pkg-some/"
+
+
+def test_project_page_redirects_to_normalized_name(app, html_client, db, storage):
+    account, api_key = given_account_exists_with_api_key(db)
+    given_project_with_file(db, storage, project_name="ex.example-pkg_some",public=True)
+
+    res = html_client.get(
+        "http://localhost/simple/ex.example-pkg_some/", auth=("__token__", api_key), allow_redirects=False
+    )
+
+    assert res.status_code == 301
+
 def test_project_page_list_files_of_public_project(app, html_client, db, storage):
     account, api_key = given_account_exists_with_api_key(db)
     given_project_with_file(db, storage, public=True)
@@ -208,6 +232,7 @@ def test_project_page_list_files_of_member_project(app, html_client, db, storage
     assert res.html.links == {
         f"/packages/example-pkg/example-pkg-0.0.1.tar.gz#{EXAMPLE_SHA256_URL}"
     }
+
 
 
 def test_project_page_denies_access_to_list_of_private_project(

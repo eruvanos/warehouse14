@@ -100,10 +100,10 @@ def create_app(
             )
 
             pypi_token = pypitoken.Token.create(
-                domain="stockroom",
+                domain="warehouse14",
                 identifier=token.id,
                 key=token.key,
-                prefix="stock",
+                prefix="wh14",
             )
 
             # save token

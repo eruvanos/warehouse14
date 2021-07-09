@@ -5,8 +5,8 @@
 <body>
 <h1>Simple Index</h1>
 
-{% for p in links %}
-    <a href="{{ p }}/">{{ p }}</a><br>
+{% for name, normalized_name in links %}
+    <a href="{{ normalized_name }}/">{{ name }}</a><br>
 {% endfor %}
 
 </body>

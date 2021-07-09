@@ -93,6 +93,6 @@ async def test_create_project(server, authenticator):
     # Assert we are on product page, edit button is available, no content
     assert "projects/exampleproject" in page.url
     assert await page.querySelector("#edit-project-btn")
-    assert "The author did not upload any content yet." in await page.plainText()
+    assert "You can upload new versions to" in await page.plainText()
 
     await browser.close()

@@ -44,9 +44,19 @@
             <ul>
                 <li>Set your username to <code>__token__</code></li>
                 <li>Set your password to the token value, including the
-                    <code>sr-pypi-</code> prefix
+                    <code>wh14-</code> prefix
                 </li>
             </ul>
+
+            <p>
+                If you are using <a href="https://pypi.org/project/poetry/">Poetry</a> to publish your
+                projects, use the following commands to configure:
+            </p>
+
+            <pre class="code-block">
+            poetry config repositories.warehouse14 {{ url_for('simple.simple_index') }}
+            poetry config http-basic.warehouse14 __token__ "{{ token_raw }}"
+            </pre>
 
             <p>
                 For example, if you are using <a href="https://pypi.org/project/twine/">Twine</a> to upload your
@@ -57,10 +67,10 @@
 [distutils]
   index-servers =
     pypi
-    stockroom
+    warehouse14
     PROJECT_NAME
 
-[stockroom]
+[warehouse14]
   username = __token__
   password = # either a user-scoped token or a project-scoped token you want to set as the default
 

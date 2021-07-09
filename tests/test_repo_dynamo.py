@@ -161,7 +161,7 @@ def test_project_save_returns_public_project(table):
 
 
 @freeze_time("2021-06-20 10:00:00")
-def test_project_get_returns_project_object(table):
+def test_project_get_returns_project_object_by_not_normalized_name(table):
     repo = DynamoDBBackend(table)
     repo.project_save(
         Project(name="projectX", admins=[], members=[], public=False, versions={})
@@ -169,6 +169,23 @@ def test_project_get_returns_project_object(table):
 
     actual_project = repo.project_get("projectX")
 
+    assert actual_project.normalized_name() == "projectx"
+    assert actual_project.name == "projectX"
+    assert len(actual_project.admins) == 0
+    assert len(actual_project.members) == 0
+    assert actual_project.public is False
+    assert len(actual_project.versions) == 0
+
+@freeze_time("2021-06-20 10:00:00")
+def test_project_returns_project_object_by_normalized_name(table):
+    repo = DynamoDBBackend(table)
+    repo.project_save(
+        Project(name="projectX", admins=[], members=[], public=False, versions={})
+    )
+
+    actual_project = repo.project_get(Project.normalize_name("projectX"))
+
+    assert actual_project.normalized_name() == "projectx"
     assert actual_project.name == "projectX"
     assert len(actual_project.admins) == 0
     assert len(actual_project.members) == 0
