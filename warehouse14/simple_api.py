@@ -53,7 +53,7 @@ def extract_metadata(form: MultiDict):
 
 
 def create_blueprint(
-    db: DBBackend, storage: PackageStorage, allow_project_creation: bool = False
+        db: DBBackend, storage: PackageStorage, allow_project_creation: bool = False
 ):
     app = Blueprint("simple", __name__)
     token_auth = HTTPBasicAuth()
@@ -70,6 +70,7 @@ def create_blueprint(
         """
         try:
             if username and username != "__token__":
+                log.warning(f"Access without proper token {username}")
                 return None
 
             token = Token.load(password)
@@ -104,6 +105,7 @@ def create_blueprint(
         # PEP 503: require normalized project
         normalized = normalize_pkgname_for_url(project_name)
         if project_name != normalized:
+            log.info(f"Redirect to normalized project name url")
             return redirect(f"/simple/{normalized}/", 301)
 
         project = db.project_get(project_name)
@@ -149,6 +151,7 @@ def create_blueprint(
         # PEP 503: require normalized project
         normalized = normalize_pkgname_for_url(project_name)
         if project_name != normalized:
+            log.info(f"Redirect to normalized project name url")
             return redirect(f"/simple/{normalized}/{filename}", 301)
 
         # Check access
@@ -163,7 +166,7 @@ def create_blueprint(
         response = send_file(
             file,
             download_name=Path(filename).name,
-            mimetype=mimetypes.guess_type(filename)[0],
+            mimetype="application/octet-stream",
         )
         return response
         # if config.cache_control:
@@ -179,19 +182,24 @@ def create_blueprint(
 
         # Get user
         username = token_auth.current_user()
+        log.info(f"Upload request from {username}")
 
         # Validate request, check for required information
         if form[":action"] != "file_upload":
+            log.warning(f"Wrong action '{form[':action:']}', only supporting 'file_upload'")
             abort(
                 403, f"Wrong action '{form[':action:']}', only supporting 'file_upload'"
             )
         if form["protocol_version"] != "1":
+            log.warning(f"Wrong protocol_version '{form['protocol_version']}'.")
             abort(403, f"Wrong protocol_version '{form['protocol_version']}'.")
         if "content" not in request.files:
+            log.warning(f"No upload content.")
             abort(403, f"No upload content.")
 
         REQUIRED_METADATA = {"name", "version", "filetype", "summary", "sha256_digest"}
         if not REQUIRED_METADATA.issubset(set(form.keys())):
+            log.warning(f"Missing required information.")
             abort(403, f"Missing required information.")
 
         project_name = form["name"]
@@ -203,6 +211,7 @@ def create_blueprint(
         project = db.project_get(project_name)
         if project is None:
             if not allow_project_creation:
+                log.warning(f"No permission to create a new project via direct upload.")
                 abort(401, f"No permission to create a new project via direct upload.")
             else:
                 project = db.project_save(
@@ -213,6 +222,7 @@ def create_blueprint(
 
         # Check permissions, only admins are allowed to upload
         if username not in project.admins:
+            log.warning(f"No permission to upload packages. {username} -> {project.normalized_name()}")
             abort(401, f"No permission to upload packages")
 
         try:
@@ -223,6 +233,7 @@ def create_blueprint(
             )
             storage.add(project.normalized_name(), file_key, file.stream)
         except FileExistsError:
+            log.warning("File already exists, overwriting not allowed")
             abort(409, "File already exists, overwriting not allowed")
 
         # Update metadata
@@ -231,6 +242,7 @@ def create_blueprint(
 
         # Update project
         db.project_save(project)
+        log.info(f"Uploaded new file for {project.normalized_name()}: {file_key}")
 
         return {"upload": "successfully"}
 

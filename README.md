@@ -23,6 +23,7 @@ on individual project level.
 
 > TODO 🙈
 
+### Deploy on AWS Lambda
 ```python
 import boto3
 from warehouse14 import OIDCAuthenticator, create_app
@@ -48,7 +49,7 @@ bucket = boto3.resource("s3").Bucket("<bucket name>")
 storage = S3Storage(bucket)
 
 app = create_app(db, storage, auth, config=config)
-lambda_handler = make_lambda_handler(app)
+lambda_handler = make_lambda_handler(app, binary_support=True)
 ```
 
 ## Glossary

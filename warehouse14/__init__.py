@@ -187,11 +187,9 @@ def create_app(
     def create_project():
         form = CreateProjectForm()
         if form.validate_on_submit():
-
-            project_name = Project.normalize_name(form.name.data)
             project = db.project_save(
                 Project(
-                    name=project_name,
+                    name=form.name.data,
                     admins=[get_user_id()],
                     members=[],
                     public=form.public.data,
