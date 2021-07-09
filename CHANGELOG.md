@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.1.8
+- support multiple versions
+
+## 0.1.7
+- small improvements
+
+## 0.1.6
+- enforce binary mimetype for static file download
+
+## 0.1.5
+- save non normalized project name
+
+## 0.1.4
+- additional logging within simple_api
+
 ## 0.1.3
 - small ui fixes
 

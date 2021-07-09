@@ -6,7 +6,7 @@
 {% block nav_content %}
     <div class="nav-content red darken-4">
         <code class="nav-title ml-s">pip install
-            -i {{ url_for("simple.simple_index", _external=True) }} {{ project.normalized_name() }}</code>
+            --extra-index-url {{ url_for("simple.simple_index", _external=True) }} {{ project.name }}</code>
 
         {#  Show edit button  #}
         {% if project.is_admin(current_user.account.name) %}

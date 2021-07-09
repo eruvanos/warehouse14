@@ -120,7 +120,7 @@ class Project(BaseModel):
         if not self.versions:
             return None
 
-        version = sorted(self.versions.keys(), key=lambda s: map(int, s.split(".")))
+        version = sorted(self.versions.keys())
         return self.versions[version[-1]]
 
     @property

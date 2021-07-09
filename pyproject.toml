@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "warehouse14"
-version = "0.1.3"
+version = "0.1.8"
 description = "A PyPI implementation for closed groups with authentication only"
 readme="README.md"
 homepage="https://github.com/eruvanos/warehouse14"
