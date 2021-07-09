@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.3
+- small ui fixes
+
 ## 0.1.2
 - add customer guidance
 - fix project storage, use normalized name as primary key

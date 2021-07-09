@@ -54,7 +54,7 @@
             </p>
 
             <pre class="code-block">
-            poetry config repositories.warehouse14 {{ url_for('simple.simple_index') }}
+            poetry config repositories.warehouse14 {{ url_for('simple.simple_index', _external=True) }}
             poetry config http-basic.warehouse14 __token__ "{{ token_raw }}"
             </pre>
 
@@ -75,7 +75,7 @@
   password = # either a user-scoped token or a project-scoped token you want to set as the default
 
 [PROJECT_NAME]
-  repository = {{ url_for('simple.simple_index') }}
+  repository = {{ url_for('simple.simple_index', _external=True) }}
   username = __token__
   password = {{ token_raw }}
             </pre>
