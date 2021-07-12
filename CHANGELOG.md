@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.9
+- improved token representation in code and pre blocks
+- show no project text and be kind
+- prevent adding empty users
+- test remove and add admin/member endpoints
+- use logger within endpoints
+- add pagination for dynamodb query and scan
+- remove `list` from Storage
+
 ## 0.1.8
 - support multiple versions
 
