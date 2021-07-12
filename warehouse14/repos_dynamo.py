@@ -46,6 +46,9 @@ class DynamoDBBackend(DBBackend):
     def __init__(self, table: "Table"):
         self._table = table
 
+        self.__scanner = self._table.meta.client.get_paginator('scan').paginate
+        self.__querier = self._table.meta.client.get_paginator('query').paginate
+
     # account methods
     def account_save(self, user_id: str, **kwargs) -> Optional[Account]:
         """
@@ -88,7 +91,7 @@ class DynamoDBBackend(DBBackend):
             )
 
     def account_token_add(
-        self, user_id: str, token_id: str, name: str, key: str
+            self, user_id: str, token_id: str, name: str, key: str
     ) -> Token:
         now = datetime.now()
         self._table.put_item(
@@ -109,8 +112,7 @@ class DynamoDBBackend(DBBackend):
 
     def account_token_list(self, account_id: str) -> List[Token]:
         query = Key("pk").eq(f"account#{account_id}") & Key("sk").begins_with("token")
-        items = self._table.query(KeyConditionExpression=query).get("Items", [])
-
+        items = self._query(KeyConditionExpression=query)
         return [
             Token(
                 id=item["sk"].split("#")[1],
@@ -136,11 +138,9 @@ class DynamoDBBackend(DBBackend):
         :param token_id: Unique token id
         :return: Account
         """
-
-        items = self._table.query(
+        items = list(self._query(
             IndexName="sk_gsi", KeyConditionExpression=Key("sk").eq(f"token#{token_id}")
-        ).get("Items", [])
-
+        ))
         if len(items) > 1:
             raise Exception(
                 f"Not able to resolve token, found to many ({len(items)}) accounts."
@@ -239,11 +239,10 @@ class DynamoDBBackend(DBBackend):
         return self.project_get(normalized_name)
 
     def project_get(self, name: str) -> Optional[Project]:
-        normalized_name=Project.normalize_name(name)
-
-        items = self._table.query(
+        normalized_name = Project.normalize_name(name)
+        items = self._query(
             KeyConditionExpression=Key("pk").eq(f"project#{normalized_name}")
-        ).get("Items", [])
+        )
 
         db_project = None
         public = False
@@ -272,6 +271,14 @@ class DynamoDBBackend(DBBackend):
             versions={k: Version(**v) for k, v in db_project["versions"].items()},
         )
 
+    def _scan(self, **kwargs):
+        for page in self.__scanner(TableName=self._table.name, **kwargs):
+            yield from page.get('Items', [])
+
+    def _query(self, **kwargs):
+        for page in self.__querier(TableName=self._table.name, **kwargs):
+            yield from page.get('Items', [])
+
     def project_list(self) -> List[Project]:
         """
         Lists all project names
@@ -279,9 +286,9 @@ class DynamoDBBackend(DBBackend):
         # TODO this will explode,
         # we have to scan the whole DB and do additional requests per project
         # we should lookup by the index for a specific user, using a paginator!
-        items = self._table.scan(
+        items = self._scan(
             FilterExpression=Key("pk").begins_with(f"project#")
-            & Key("sk").begins_with("project#"),
-        ).get("Items", [])
+                             & Key("sk").begins_with("project#"),
+        )
 
         return [self.project_get(p["name"]) for p in items]

@@ -9,9 +9,6 @@ def test_round_trip(bucket):
     # Add
     fs.add("example_project", "test.txt", BytesIO(b"Hello World!"))
 
-    # List files
-    assert list(fs.list()) == ["example_project/test.txt"]
-
     # Retrieve file
     data = fs.get("example_project", "test.txt")
     assert data.read() == b"Hello World!"

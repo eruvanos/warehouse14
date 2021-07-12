@@ -17,10 +17,6 @@ class PackageStorage(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def list(self) -> Iterable[str]:
-        raise NotImplementedError()
-
-    @abstractmethod
     def get(self, project: str, file: str) -> BinaryIO:
         raise NotImplementedError()
 
@@ -59,13 +55,6 @@ class SimpleFileStorage(PackageStorage):
 
         key.parent.mkdir(parents=True, exist_ok=True)
         key.write_bytes(data.read())
-
-    def list(self) -> Iterable[str]:
-        return [
-            str(x.relative_to(self._root))
-            for x in self._root.glob("**/*")
-            if x.is_file()
-        ]
 
     def get(self, project: str, file: str) -> BinaryIO:
         key = self._root / project / file
