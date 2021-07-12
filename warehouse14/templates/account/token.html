@@ -54,9 +54,8 @@
             </p>
 
             <pre class="code-block">
-            poetry config repositories.warehouse14 {{ url_for('simple.simple_index', _external=True) }}
-            poetry config http-basic.warehouse14 __token__ "{{ token_raw }}"
-            </pre>
+poetry config repositories.warehouse14 {{ url_for('simple.simple_index', _external=True) }}
+poetry config http-basic.warehouse14 __token__ "{{ token_raw }}"</pre>
 
             <p>
                 For example, if you are using <a href="https://pypi.org/project/twine/">Twine</a> to upload your
