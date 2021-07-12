@@ -30,13 +30,18 @@ _RENDERERS = {
 
 
 def create_app(
-    db: DBBackend, storage: PackageStorage, auth: Authenticator, config: dict = None, allow_project_creation=False
+    db: DBBackend,
+    storage: PackageStorage,
+    auth: Authenticator,
+    config: dict = None,
+    allow_project_creation=False,
 ):
     app = Flask(__name__)
     if config:
         app.config.update(**config)
-
     Markdown(app, extensions=["footnotes", "fenced_code"])
+
+    log = app.logger
 
     # Setup Login and authentication
     login_manager = LoginManager(app)
@@ -234,14 +239,16 @@ def create_app(
     @app.post("/projects/<project_name>/admins")
     @login_required
     def project_add_admin(project_name):
-        print(request.form["username"])
-        project = db.project_get(project_name)
-        project.admins.append(request.form["username"])
+        new_user = request.form.get("username")
+        if new_user:
+            log.info(f"{project_name} {get_user_id()} added {new_user} as admin")
+            project = db.project_get(project_name)
+            project.admins.append(new_user)
+            db.project_save(project)
 
-        db.project_save(project)
         return redirect(url_for("project_users", project_name=project_name))
 
-    @app.get("/projects/<project_name>/admins/<username>")
+    @app.get("/projects/<project_name>/admins/<username>/delete")
     @login_required
     def project_remove_admin(project_name, username):
         project = db.project_get(project_name)
@@ -255,13 +262,15 @@ def create_app(
     @app.post("/projects/<project_name>/members")
     @login_required
     def project_add_member(project_name):
-        print(request.form["username"])
-        project = db.project_get(project_name)
-        project.members.append(request.form["username"])
-        db.project_save(project)
+        new_user = request.form.get("username")
+        if new_user:
+            log.info(f"{project_name} {get_user_id()} added {new_user} as member")
+            project = db.project_get(project_name)
+            project.members.append(request.form["username"])
+            db.project_save(project)
         return redirect(url_for("project_users", project_name=project_name))
 
-    @app.get("/projects/<project_name>/users/<username>")
+    @app.get("/projects/<project_name>/members/<username>/delete")
     @login_required
     def project_remove_member(project_name, username):
         project = db.project_get(project_name)

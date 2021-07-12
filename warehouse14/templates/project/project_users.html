@@ -24,7 +24,7 @@
                         {% for admin in project.admins %}
                             <li class="collection-item">
                                 <div>
-                                    {{ admin }}
+                                    <span class="admin">{{ admin }}</span>
                                     <a
                                             href="{{ url_for('project_remove_admin', project_name=project.name, username=admin) }}"
                                             class="secondary-content"><i class="material-icons">delete</i></a>
@@ -51,7 +51,7 @@
                         {% for member in project.members %}
                             <li class="collection-item">
                                 <div>
-                                    {{ member }}
+                                    <span class="member">{{ member }}</span>
                                     <a
                                             href="{{ url_for('project_remove_member', project_name=project.name, username=member) }}"
                                             class="secondary-content"><i class="material-icons">delete</i></a>

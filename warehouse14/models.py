@@ -145,6 +145,7 @@ class Project(BaseModel):
         """Perform PEP 503 normalization"""
         return re.sub(r"[-_.]+", "-", name).lower()
 
+
 # class DB(ABC):
 #     def get_project(self, name: str) -> Optional[Project]:
 #         """

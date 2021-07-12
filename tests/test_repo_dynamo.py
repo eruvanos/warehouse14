@@ -104,6 +104,7 @@ def test_account_token_delete_removes_token(table):
     actual_tokens = repo.account_token_list("userX")
     assert len(actual_tokens) == 0
 
+
 @freeze_time("2021-06-20 10:00:00")
 def test_resolve_token_returns_an_account(table):
     repo = DynamoDBBackend(table)
@@ -175,6 +176,7 @@ def test_project_get_returns_project_object_by_not_normalized_name(table):
     assert len(actual_project.members) == 0
     assert actual_project.public is False
     assert len(actual_project.versions) == 0
+
 
 @freeze_time("2021-06-20 10:00:00")
 def test_project_returns_project_object_by_normalized_name(table):

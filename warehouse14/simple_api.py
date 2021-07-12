@@ -53,7 +53,7 @@ def extract_metadata(form: MultiDict):
 
 
 def create_blueprint(
-        db: DBBackend, storage: PackageStorage, allow_project_creation: bool = False
+    db: DBBackend, storage: PackageStorage, allow_project_creation: bool = False
 ):
     app = Blueprint("simple", __name__)
     token_auth = HTTPBasicAuth()
@@ -95,7 +95,9 @@ def create_blueprint(
     def simple_index():
         usern_name = token_auth.current_user()
         links = sorted(
-            (p.name, p.normalized_name()) for p in db.project_list() if p.visible(usern_name)
+            (p.name, p.normalized_name())
+            for p in db.project_list()
+            if p.visible(usern_name)
         )
         return render_template("simple/simple.html", links=links)
 
@@ -186,7 +188,9 @@ def create_blueprint(
 
         # Validate request, check for required information
         if form[":action"] != "file_upload":
-            log.warning(f"Wrong action '{form[':action:']}', only supporting 'file_upload'")
+            log.warning(
+                f"Wrong action '{form[':action:']}', only supporting 'file_upload'"
+            )
             abort(
                 403, f"Wrong action '{form[':action:']}', only supporting 'file_upload'"
             )
@@ -222,7 +226,9 @@ def create_blueprint(
 
         # Check permissions, only admins are allowed to upload
         if username not in project.admins:
-            log.warning(f"No permission to upload packages. {username} -> {project.normalized_name()}")
+            log.warning(
+                f"No permission to upload packages. {username} -> {project.normalized_name()}"
+            )
             abort(401, f"No permission to upload packages")
 
         try:

@@ -46,8 +46,8 @@ class DynamoDBBackend(DBBackend):
     def __init__(self, table: "Table"):
         self._table = table
 
-        self.__scanner = self._table.meta.client.get_paginator('scan').paginate
-        self.__querier = self._table.meta.client.get_paginator('query').paginate
+        self.__scanner = self._table.meta.client.get_paginator("scan").paginate
+        self.__querier = self._table.meta.client.get_paginator("query").paginate
 
     # account methods
     def account_save(self, user_id: str, **kwargs) -> Optional[Account]:
@@ -91,7 +91,7 @@ class DynamoDBBackend(DBBackend):
             )
 
     def account_token_add(
-            self, user_id: str, token_id: str, name: str, key: str
+        self, user_id: str, token_id: str, name: str, key: str
     ) -> Token:
         now = datetime.now()
         self._table.put_item(
@@ -138,9 +138,12 @@ class DynamoDBBackend(DBBackend):
         :param token_id: Unique token id
         :return: Account
         """
-        items = list(self._query(
-            IndexName="sk_gsi", KeyConditionExpression=Key("sk").eq(f"token#{token_id}")
-        ))
+        items = list(
+            self._query(
+                IndexName="sk_gsi",
+                KeyConditionExpression=Key("sk").eq(f"token#{token_id}"),
+            )
+        )
         if len(items) > 1:
             raise Exception(
                 f"Not able to resolve token, found to many ({len(items)}) accounts."
@@ -273,11 +276,11 @@ class DynamoDBBackend(DBBackend):
 
     def _scan(self, **kwargs):
         for page in self.__scanner(TableName=self._table.name, **kwargs):
-            yield from page.get('Items', [])
+            yield from page.get("Items", [])
 
     def _query(self, **kwargs):
         for page in self.__querier(TableName=self._table.name, **kwargs):
-            yield from page.get('Items', [])
+            yield from page.get("Items", [])
 
     def project_list(self) -> List[Project]:
         """
@@ -288,7 +291,7 @@ class DynamoDBBackend(DBBackend):
         # we should lookup by the index for a specific user, using a paginator!
         items = self._scan(
             FilterExpression=Key("pk").begins_with(f"project#")
-                             & Key("sk").begins_with("project#"),
+            & Key("sk").begins_with("project#"),
         )
 
         return [self.project_get(p["name"]) for p in items]
