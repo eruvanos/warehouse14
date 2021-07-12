@@ -90,5 +90,6 @@ def test_project_page_shows_details(html_client, app, db, storage):
 
     assert res.status_code == 200, res.text
     assert (
-        f"pip install -i http://localhost/simple/ {project.name}" in res.html.find(".nav-content", first=True).text
+        f"pip install --extra-index-url http://localhost/simple/ {project.name}"
+        in res.html.find(".nav-content", first=True).text
     )

@@ -12,7 +12,7 @@ user = "__token__"
 token = "wh14-AgELd2FyZWhvdXNlMTQCJGE0ZjBlOTRlLTY2YTgtNDgyOC1hMTQxLWEzNjIyZGNiM2ZhZAAABiDh---rL06JZKop2Cp2ABTXwDXd8P03DXkFmHiCe-SCvw"
 
 with (PROJECT_BASE_PATH / "fixtures/mypkg/dist/example-pkg-0.0.1.tar.gz").open(
-        "rb"
+    "rb"
 ) as file:
     res = requests.post(
         api,
@@ -29,7 +29,7 @@ with (PROJECT_BASE_PATH / "fixtures/mypkg/dist/example-pkg-0.0.1.tar.gz").open(
             "summary": "Example package to test file upload.",
         },
         files={"content": file},
-        allow_redirects=False
+        allow_redirects=False,
     )
 
     print(res.status_code)
