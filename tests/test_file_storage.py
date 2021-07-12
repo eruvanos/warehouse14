@@ -10,10 +10,6 @@ def test_round_trip(tmpdir):
     fs.add("example_project", "test.txt", BytesIO(b"Hello World!"))
     assert (tmpdir / "packages" / "example_project" / "test.txt").exists()
 
-    # List files
-    files = fs.list()
-    assert files == ["example_project/test.txt"]
-
     # Retrieve file
     data = fs.get("example_project", "test.txt")
     assert data.read() == b"Hello World!"

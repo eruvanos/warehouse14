@@ -1,5 +1,12 @@
 # Warehouse14 Developer logbook
 
+## 2021-07-12
+
+While visiting the dynamodb backend to put in pagination, we discovered that 
+also the storage `list` method would be limited to 3000 objects.
+Because we never use the list on the storage, we removed it from the whole interface.
+
+
 ## 2021-07-04
 Still problems with the basic Dynamodb backend implementation, reducing the amount of required methods to implement for a backend feels good. 
 
