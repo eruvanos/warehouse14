@@ -38,6 +38,20 @@
     {% block nav_content %}{% endblock %}
 </nav>
 
+{# Alerts #}
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="container">
+            {% for message in messages %}
+                <div class="flashing lime lighten-5">
+                    <i class="material-icons small">error_outline</i> <span class="flashing-message">{{ message }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endwith %}
+
+
 <div id="content">
     {% block content %}{% endblock %}
 </div>
