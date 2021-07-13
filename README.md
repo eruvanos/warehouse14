@@ -24,7 +24,10 @@ on individual project level.
 > TODO 🙈
 
 ### Deploy on AWS Lambda
+
 ```python
+# Requirements: warehouse[aws], apig_wsgi
+
 import boto3
 from warehouse14 import OIDCAuthenticator, create_app
 from warehouse14.repos_dynamo import DynamoDBBackend, create_table
@@ -33,13 +36,12 @@ from warehouse14.storage import S3Storage
 # requires apig_wsgi
 from apig_wsgi import make_lambda_handler
 
-config = {}
-config["SECRET_KEY"] = "{{ LONG_RANDOM_STRING }}"
-config["OIDC_USER_ID_FIELD"] = "email"
-config["OIDC_CLIENT_ID"] = "<your oidc client id>"
-config["OIDC_CLIENT_SECRET"] = "<your oidc client secret>"
-config["OIDC_SERVER_METADATA_URL"] = "https://<idp>/.well-known/openid-configuration"
-auth = OIDCAuthenticator()
+auth = OIDCAuthenticator(
+    client_id="<your oidc client id>",
+    client_secret="<your oidc client secret>",
+    user_id_field="email",
+    server_metadata_url="https://<idp>/.well-known/openid-configuration",
+)
 
 dynamodb = boto3.resource("dynamodb")
 table = create_table(dynamodb, "table")
@@ -48,7 +50,7 @@ db = DynamoDBBackend(table)
 bucket = boto3.resource("s3").Bucket("<bucket name>")
 storage = S3Storage(bucket)
 
-app = create_app(db, storage, auth, config=config)
+app = create_app(db, storage, auth, config={"SECRET_KEY": "{{ LONG_RANDOM_STRING }}"})
 lambda_handler = make_lambda_handler(app, binary_support=True)
 ```
 
