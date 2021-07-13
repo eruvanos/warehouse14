@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.10
+- improve OIDC configuration code
+
 ## 0.1.9
 - improved token representation in code and pre blocks
 - show no project text and be kind

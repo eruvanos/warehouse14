@@ -3,6 +3,7 @@ from typing import Dict
 from urllib.parse import urlencode
 
 import flask_login
+from authlib.integrations.base_client.base_oauth import OAUTH_CLIENT_PARAMS
 from authlib.integrations.flask_client import OAuth, FlaskRemoteApp
 from flask import Flask, url_for, session, redirect, request, Response
 from flask_login import UserMixin
@@ -41,8 +42,12 @@ class Authenticator(metaclass=ABCMeta):
 class OIDCAuthenticator(Authenticator):
     app: Flask
 
-    def __init__(self, app=None):
+    def __init__(self, app=None, **kwargs):
+        """
+        kwargs are passed to the underlying authlib client if they are listed in OAUTH_CLIENT_PARAMS.
+        """
         self.oauth = None
+        self.oidc_config = {k:v for k,v in kwargs.items() if k in OAUTH_CLIENT_PARAMS}
 
         if app:
             self.init_app(app)
@@ -52,7 +57,9 @@ class OIDCAuthenticator(Authenticator):
 
         self.oauth = OAuth(app)
         self.oauth.register(
-            name="oidc", client_kwargs={"scope": "openid email profile"}
+            name="oidc",
+            client_kwargs={"scope": "openid email profile"},
+            **self.oidc_config
         )
 
         app.route("/oauth")(self._auth)
