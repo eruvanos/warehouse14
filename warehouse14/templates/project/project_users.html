@@ -8,8 +8,11 @@
     <div class="nav-content">
         <ul class="tabs tabs-transparent">
             <li class="tab"><a class=""
-                               href="{{ url_for('edit_project', project_name=project.normalized_name()) }}">Project</a></li>
-            <li class="tab"><a class="active" href="{{ url_for('project_users', project_name=project.normalized_name()) }}">Users</a></li>
+                               href="{{ url_for('edit_project', project_name=project.normalized_name()) }}">Project</a>
+            </li>
+            <li class="tab"><a class="active"
+                               href="{{ url_for('project_users', project_name=project.normalized_name()) }}">Users</a>
+            </li>
         </ul>
     </div>
 {% endblock %}
@@ -36,7 +39,8 @@
                 <div class="row">
                     <form action="{{ url_for('project_add_admin', project_name=project.name) }}" method="POST">
                         <input type="text" name="username" class="col s11">
-                        <button type="submit" class="waves-effect waves-teal btn col s1 white-text"><i class="material-icons">add</i>
+                        <button type="submit" class="waves-effect waves-teal btn col s1 white-text"><i
+                                class="material-icons">add</i>
                         </button>
                     </form>
                 </div>
@@ -63,7 +67,8 @@
                 <div class="row">
                     <form action="{{ url_for('project_add_member', project_name=project.name) }}" method="POST">
                         <input type="text" name="username" class="col s11">
-                        <button type="submit" class="waves-effect waves-teal btn col s1 white-text"><i class="material-icons">add</i>
+                        <button type="submit" class="waves-effect waves-teal btn col s1 white-text"><i
+                                class="material-icons">add</i>
                         </button>
                     </form>
                 </div>

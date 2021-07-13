@@ -8,7 +8,7 @@ import pypitoken
 import readme_renderer.markdown
 import readme_renderer.rst
 import readme_renderer.txt
-from flask import Flask, render_template, redirect, url_for, abort, request, g
+from flask import Flask, render_template, redirect, url_for, abort, request, g, flash
 from flask_login import LoginManager, login_required, current_user, logout_user
 from flaskext.markdown import Markdown
 
@@ -239,10 +239,13 @@ def create_app(
     @app.post("/projects/<project_name>/admins")
     @login_required
     def project_add_admin(project_name):
+        project = db.project_get(project_name)
+        if not project.is_admin(get_user_id()):
+            abort(401, 'You are not an admin, what are you doing here?')
+
         new_user = request.form.get("username")
         if new_user:
             log.info(f"{project_name} {get_user_id()} added {new_user} as admin")
-            project = db.project_get(project_name)
             project.admins.append(new_user)
             db.project_save(project)
 
@@ -252,20 +255,29 @@ def create_app(
     @login_required
     def project_remove_admin(project_name, username):
         project = db.project_get(project_name)
+        if not project.is_admin(get_user_id()):
+            abort(401, 'You are not an admin, what are you doing here?')
 
-        # Never delete the last admin!
-        if len(project.admins) > 1 and username in project.admins:
-            project.admins.remove(username)
-        db.project_save(project)
+        if username in project.admins:
+            # Never delete the last admin!
+            if len(project.admins) > 1:
+                project.admins.remove(username)
+                db.project_save(project)
+            else:
+                flash("A project requires at least one admin.")
+
         return redirect(url_for("project_users", project_name=project_name))
 
     @app.post("/projects/<project_name>/members")
     @login_required
     def project_add_member(project_name):
+        project = db.project_get(project_name)
+        if not project.is_admin(get_user_id()):
+            abort(401, 'You are not an admin, what are you doing here?')
+
         new_user = request.form.get("username")
         if new_user:
             log.info(f"{project_name} {get_user_id()} added {new_user} as member")
-            project = db.project_get(project_name)
             project.members.append(request.form["username"])
             db.project_save(project)
         return redirect(url_for("project_users", project_name=project_name))
@@ -274,9 +286,13 @@ def create_app(
     @login_required
     def project_remove_member(project_name, username):
         project = db.project_get(project_name)
+        if not project.is_admin(get_user_id()):
+            abort(401, 'You are not an admin, what are you doing here?')
+
         if username in project.members:
             project.members.remove(username)
-        db.project_save(project)
+            db.project_save(project)
+
         return redirect(url_for("project_users", project_name=project_name))
 
     return app

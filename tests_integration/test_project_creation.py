@@ -73,7 +73,7 @@ async def test_title(server, authenticator):
 
 @pytest.mark.asyncio
 async def test_create_project(server, authenticator):
-    browser = await launch({"headless": False})
+    browser = await launch({"headless": True})
 
     # Open product page
     page = await browser.newPage()

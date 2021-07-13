@@ -2,6 +2,7 @@
 
 ## 0.1.10
 - improve OIDC configuration code
+- restrict user management 🥶
 
 ## 0.1.9
 - improved token representation in code and pre blocks

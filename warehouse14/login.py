@@ -47,7 +47,7 @@ class OIDCAuthenticator(Authenticator):
         kwargs are passed to the underlying authlib client if they are listed in OAUTH_CLIENT_PARAMS.
         """
         self.oauth = None
-        self.oidc_config = {k:v for k,v in kwargs.items() if k in OAUTH_CLIENT_PARAMS}
+        self.oidc_config = {k: v for k, v in kwargs.items() if k in OAUTH_CLIENT_PARAMS}
 
         if app:
             self.init_app(app)
@@ -59,7 +59,7 @@ class OIDCAuthenticator(Authenticator):
         self.oauth.register(
             name="oidc",
             client_kwargs={"scope": "openid email profile"},
-            **self.oidc_config
+            **self.oidc_config,
         )
 
         app.route("/oauth")(self._auth)
