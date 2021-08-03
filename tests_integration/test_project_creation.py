@@ -2,11 +2,12 @@ import flask_login
 import pytest
 from flask import Response, redirect
 from pyppeteer import launch
+from pyppeteer.element_handle import ElementHandle
 
+from tests_integration.server import FlaskTestServer
 from warehouse14 import create_app, Authenticator, DBBackend, PackageStorage
 from warehouse14.repos_dynamo import DynamoDBBackend
 from warehouse14.storage import S3Storage
-from tests_integration.server import FlaskTestServer
 
 
 class MockAuthenticator(Authenticator):
@@ -52,6 +53,10 @@ def server(tmpdir, db, storage, authenticator):
     server.shutdown_server()
 
 
+async def get_text(page, element: ElementHandle) -> str:
+    return await page.evaluate('(element) => element.textContent', element)
+
+
 async def _login(page, server_url, user_id):
     await page.goto(f"{server_url}/_auto_login/{user_id}")
     assert f"Logged in as {user_id}" in await page.plainText()
@@ -72,7 +77,7 @@ async def test_title(server, authenticator):
 
 
 @pytest.mark.asyncio
-async def test_create_project(server, authenticator):
+async def test_manage_project(server, authenticator):
     browser = await launch({"headless": True})
 
     # Open product page
@@ -94,5 +99,20 @@ async def test_create_project(server, authenticator):
     assert "projects/exampleproject" in page.url
     assert await page.querySelector("#edit-project-btn")
     assert "You can upload new versions to" in await page.plainText()
+
+    # Open project edit page
+    await page.click("#edit-project-btn")
+    await page.click("#edit-project-users-tab")
+
+    # Add Member
+    await page.type("input[name=username]", "example-user")
+    await page.click("button[type='submit']")
+    members = [await get_text(page, element) for element in await page.querySelectorAll(".member")]
+    assert "example-user" in members
+
+    # Remove Member
+    await page.click("#project-member-example-user-remove")
+    members = [await get_text(page, element) for element in await page.querySelectorAll(".member")]
+    assert "example-user" not in members
 
     await browser.close()

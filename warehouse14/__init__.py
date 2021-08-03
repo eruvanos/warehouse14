@@ -236,24 +236,41 @@ def create_app(
 
         return render_template("project/project_users.html", project=project)
 
-    @app.post("/projects/<project_name>/admins")
+    @app.post("/projects/<project_name>/users")
     @login_required
-    def project_add_admin(project_name):
+    def project_users_add(project_name):
         project = db.project_get(project_name)
         if not project.is_admin(get_user_id()):
             abort(401, 'You are not an admin, what are you doing here?')
 
         new_user = request.form.get("username")
-        if new_user:
-            log.info(f"{project_name} {get_user_id()} added {new_user} as admin")
-            project.admins.append(new_user)
-            db.project_save(project)
+        new_role = request.form.get("role")
+
+        if new_user and new_role:
+            # TODO check that user does not exist
+            if new_user in project.admins:
+                project.admins.remove(new_user)
+            if new_user in project.members:
+                project.members.remove(new_user)
+
+            log.info(f"{project_name} {get_user_id()} added {new_user} as {new_role}")
+            if new_role == "admin":
+                project.admins.append(new_user)
+            elif new_role == "member":
+                project.members.append(new_user)
+            else:
+                flash("Invalid role chosen!")
+
+            if len(project.admins) > 0:
+                db.project_save(project)
+            else:
+                flash("A project requires at least one admin.")
 
         return redirect(url_for("project_users", project_name=project_name))
 
-    @app.get("/projects/<project_name>/admins/<username>/delete")
+    @app.get("/projects/<project_name>/users/<username>/delete")
     @login_required
-    def project_remove_admin(project_name, username):
+    def project_users_remove(project_name, username):
         project = db.project_get(project_name)
         if not project.is_admin(get_user_id()):
             abort(401, 'You are not an admin, what are you doing here?')
@@ -265,29 +282,6 @@ def create_app(
                 db.project_save(project)
             else:
                 flash("A project requires at least one admin.")
-
-        return redirect(url_for("project_users", project_name=project_name))
-
-    @app.post("/projects/<project_name>/members")
-    @login_required
-    def project_add_member(project_name):
-        project = db.project_get(project_name)
-        if not project.is_admin(get_user_id()):
-            abort(401, 'You are not an admin, what are you doing here?')
-
-        new_user = request.form.get("username")
-        if new_user:
-            log.info(f"{project_name} {get_user_id()} added {new_user} as member")
-            project.members.append(request.form["username"])
-            db.project_save(project)
-        return redirect(url_for("project_users", project_name=project_name))
-
-    @app.get("/projects/<project_name>/members/<username>/delete")
-    @login_required
-    def project_remove_member(project_name, username):
-        project = db.project_get(project_name)
-        if not project.is_admin(get_user_id()):
-            abort(401, 'You are not an admin, what are you doing here?')
 
         if username in project.members:
             project.members.remove(username)

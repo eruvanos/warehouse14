@@ -75,6 +75,8 @@ def create_blueprint(
 
             token = Token.load(password)
             account = db.resolve_token(token.identifier)
+            if account is None:
+                return None
 
             for tk in db.account_token_list(account.name):
                 if tk.id == token.identifier:

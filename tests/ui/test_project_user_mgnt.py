@@ -57,23 +57,23 @@ def _login(html_client, user_id):
     html_client.get(f"http://localhost/_auto_login/{user_id}")
 
 
-def test_admin_add_new_restricted(html_client, app, db, storage):
+def test_users_add_new_restricted(html_client, app, db, storage):
     _login(html_client, "user1")
     project = given_project_with_file(db, storage, admins=["admin1"])
 
     res: HTMLResponse = html_client.post(
-        f"http://localhost/projects/{project.name}/admins", data={"username": "admin2"}
+        f"http://localhost/projects/{project.name}/users", data={"username": "admin2", "role": "admin"}
     )
 
     assert res.status_code == 401
 
 
-def test_admin_add_new(html_client, app, db, storage):
+def test_users_add_admin(html_client, app, db, storage):
     _login(html_client, "admin1")
     project = given_project_with_file(db, storage, admins=["admin1"])
 
     res: HTMLResponse = html_client.post(
-        f"http://localhost/projects/{project.name}/admins", data={"username": "admin2"}
+        f"http://localhost/projects/{project.name}/users", data={"username": "admin2", "role": "admin"}
     )
 
     assert res.status_code == 200, res.text
@@ -83,82 +83,95 @@ def test_admin_add_new(html_client, app, db, storage):
     ]
 
 
-def test_admin_add_duplicate(html_client, app, db, storage):
+def test_users_add_duplicate_admin(html_client, app, db, storage):
     _login(html_client, "admin1")
     project = given_project_with_file(db, storage, admins=["admin1"])
 
     res: HTMLResponse = html_client.post(
-        f"http://localhost/projects/{project.name}/admins", data={"username": "admin1"}
+        f"http://localhost/projects/{project.name}/users", data={"username": "admin1", "role": "admin"}
     )
 
     assert res.status_code == 200, res.text
     assert list(map(attrgetter("text"), res.html.find(".admin"))) == ["admin1"]
 
 
-def test_admin_add_empty(html_client, app, db, storage):
+def test_users_add_empty(html_client, app, db, storage):
     _login(html_client, "admin1")
     project = given_project_with_file(db, storage, admins=["admin1"])
 
     res: HTMLResponse = html_client.post(
-        f"http://localhost/projects/{project.name}/admins", data={"username": ""}
+        f"http://localhost/projects/{project.name}/users", data={"username": "", "role": "admin"}
     )
 
     assert res.status_code == 200, res.text
     assert list(map(attrgetter("text"), res.html.find(".admin"))) == ["admin1"]
 
 
-def test_admin_add_missing_field(html_client, app, db, storage):
+def test_users_add_admin_missing_user_field(html_client, app, db, storage):
     _login(html_client, "admin1")
     project = given_project_with_file(db, storage, admins=["admin1"])
 
     res: HTMLResponse = html_client.post(
-        f"http://localhost/projects/{project.name}/admins", data={}
+        f"http://localhost/projects/{project.name}/users", data={"role": "admin"}
     )
 
     assert res.status_code == 200, res.text
     assert list(map(attrgetter("text"), res.html.find(".admin"))) == ["admin1"]
 
 
-def test_admin_remove(html_client, app, db, storage):
+def test_users_add_admin_missing_role_field(html_client, app, db, storage):
+    _login(html_client, "admin1")
+    project = given_project_with_file(db, storage, admins=["admin1"])
+
+    res: HTMLResponse = html_client.post(
+        f"http://localhost/projects/{project.name}/users", data={"username": "admin2"}
+    )
+
+    assert res.status_code == 200, res.text
+    assert list(map(attrgetter("text"), res.html.find(".admin"))) == ["admin1"]
+
+
+def test_users_remove_admin(html_client, app, db, storage):
     _login(html_client, "admin1")
     project = given_project_with_file(db, storage, admins=["admin1", "admin2"])
 
     res: HTMLResponse = html_client.get(
-        f"http://localhost/projects/{project.name}/admins/admin2/delete"
+        f"http://localhost/projects/{project.name}/users/admin2/delete"
     )
 
     assert res.status_code == 200, res.text
     assert list(map(attrgetter("text"), res.html.find(".admin"))) == ["admin1"]
 
-def test_admin_remove_not_existing(html_client, app, db, storage):
+
+def test_users_remove_admin_not_existing(html_client, app, db, storage):
     _login(html_client, "admin1")
     project = given_project_with_file(db, storage, admins=["admin1", "admin2"])
 
     res: HTMLResponse = html_client.get(
-        f"http://localhost/projects/{project.name}/admins/admin3/delete"
+        f"http://localhost/projects/{project.name}/users/admin3/delete"
     )
 
     assert res.status_code == 200, res.text
     assert list(map(attrgetter("text"), res.html.find(".admin"))) == ["admin1", "admin2"]
 
 
-def test_admin_remove_restricted(html_client, app, db, storage):
+def test_users_remove_restricted(html_client, app, db, storage):
     _login(html_client, "user1")
     project = given_project_with_file(db, storage, admins=["admin1", "admin2"])
 
     res: HTMLResponse = html_client.get(
-        f"http://localhost/projects/{project.name}/admins/admin2/delete"
+        f"http://localhost/projects/{project.name}/users/admin2/delete"
     )
 
     assert res.status_code == 401
 
 
-def test_admin_remove_last(html_client, app, db, storage):
+def test_users_remove_last_admin(html_client, app, db, storage):
     _login(html_client, "admin1")
     project = given_project_with_file(db, storage, admins=["admin1"])
 
     res: HTMLResponse = html_client.get(
-        f"http://localhost/projects/{project.name}/admins/admin1/delete"
+        f"http://localhost/projects/{project.name}/users/admin1/delete"
     )
 
     assert res.status_code == 200, res.text
@@ -168,111 +181,66 @@ def test_admin_remove_last(html_client, app, db, storage):
     ]
 
 
-def test_member_add_new_restricted(html_client, app, db, storage):
-    _login(html_client, "user1")
-    project = given_project_with_file(db, storage, admins=["admin1"], members=["user2"])
+def test_users_overwite_last_admin(html_client, app, db, storage):
+    _login(html_client, "admin1")
+    project = given_project_with_file(db, storage, admins=["admin1"])
 
     res: HTMLResponse = html_client.post(
-        f"http://localhost/projects/{project.name}/members", data={"username": "user3"}
+        f"http://localhost/projects/{project.name}/users", data={"username": "admin1", "role": "member"}
     )
 
-    assert res.status_code == 401
+    assert res.status_code == 200, res.text
+    assert list(map(attrgetter("text"), res.html.find(".admin"))) == ["admin1"]
+    assert list(map(attrgetter("text"), res.html.find(".flashing-message"))) == [
+        "A project requires at least one admin."
+    ]
 
 
-def test_member_add_new(html_client, app, db, storage):
+def test_users_add_member(html_client, app, db, storage):
     _login(html_client, "admin1")
     project = given_project_with_file(db, storage, admins=["admin1"], members=["user2"])
 
     res: HTMLResponse = html_client.post(
-        f"http://localhost/projects/{project.name}/members", data={"username": "user3"}
+        f"http://localhost/projects/{project.name}/users", data={"username": "user3", "role": "member"}
     )
 
     assert res.status_code == 200, res.text
     assert list(map(attrgetter("text"), res.html.find(".member"))) == ["user2", "user3"]
 
 
-def test_member_add_duplicate(html_client, app, db, storage):
+def test_users_add_duplicate_member(html_client, app, db, storage):
     _login(html_client, "admin1")
     project = given_project_with_file(db, storage, admins=["admin1"], members=["user2"])
 
     res: HTMLResponse = html_client.post(
-        f"http://localhost/projects/{project.name}/members", data={"username": "user2"}
+        f"http://localhost/projects/{project.name}/users", data={"username": "user2", "role": "member"}
     )
 
     assert res.status_code == 200, res.text
     assert list(map(attrgetter("text"), res.html.find(".member"))) == ["user2"]
 
 
-def test_member_add_empty(html_client, app, db, storage):
-    _login(html_client, "admin1")
-    project = given_project_with_file(db, storage, admins=["admin1"], members=["user2"])
-
-    res: HTMLResponse = html_client.post(
-        f"http://localhost/projects/{project.name}/members", data={"username": ""}
-    )
-
-    assert res.status_code == 200, res.text
-    assert list(map(attrgetter("text"), res.html.find(".member"))) == ["user2"]
-
-
-def test_member_add_missing_field(html_client, app, db, storage):
-    _login(html_client, "admin1")
-    project = given_project_with_file(db, storage, admins=["admin1"], members=["user2"])
-
-    res: HTMLResponse = html_client.post(
-        f"http://localhost/projects/{project.name}/members", data={}
-    )
-
-    assert res.status_code == 200, res.text
-    assert list(map(attrgetter("text"), res.html.find(".member"))) == ["user2"]
-
-
-def test_member_remove_restricted(html_client, app, db, storage):
-    _login(html_client, "user1")
-    project = given_project_with_file(
-        db, storage, admins=["admin1"], members=["user2", "user3"]
-    )
-
-    res: HTMLResponse = html_client.get(
-        f"http://localhost/projects/{project.name}/members/user3/delete"
-    )
-
-    assert res.status_code == 401
-
-
-def test_member_remove(html_client, app, db, storage):
+def test_users_remove_member(html_client, app, db, storage):
     _login(html_client, "admin1")
     project = given_project_with_file(
         db, storage, admins=["admin1"], members=["user2", "user3"]
     )
 
     res: HTMLResponse = html_client.get(
-        f"http://localhost/projects/{project.name}/members/user3/delete"
+        f"http://localhost/projects/{project.name}/users/user3/delete"
     )
 
     assert res.status_code == 200, res.text
     assert list(map(attrgetter("text"), res.html.find(".member"))) == ["user2"]
 
 
-def test_member_remove_last(html_client, app, db, storage):
+def test_users_remove_last_member(html_client, app, db, storage):
     _login(html_client, "admin1")
     project = given_project_with_file(db, storage, admins=["admin1"], members=["user2"])
 
     res: HTMLResponse = html_client.get(
-        f"http://localhost/projects/{project.name}/members/user2/delete"
+        f"http://localhost/projects/{project.name}/users/user2/delete"
     )
 
     assert res.status_code == 200, res.text
     assert list(map(attrgetter("text"), res.html.find(".member"))) == []
-
-
-def test_member_remove_not_existing(html_client, app, db, storage):
-    _login(html_client, "admin1")
-    project = given_project_with_file(db, storage, admins=["admin1"], members=["user2"])
-
-    res: HTMLResponse = html_client.get(
-        f"http://localhost/projects/{project.name}/members/user3/delete"
-    )
-
-    assert res.status_code == 200, res.text
-    assert list(map(attrgetter("text"), res.html.find(".member"))) == ["user2"]
