@@ -27,6 +27,16 @@ code {
     color: #6c6c6c;
 }
 
+/* Users Page*/
+.user {
+    display: inline-block;
+    width: 40%;
+}
+.user_role {
+    display: inline-block;
+    width: 40%;
+}
+
 /* Flashing */
 .flashing {
     margin: .5rem 0 0 0;

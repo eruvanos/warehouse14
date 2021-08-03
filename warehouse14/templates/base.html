@@ -44,7 +44,8 @@
         <div class="container">
             {% for message in messages %}
                 <div class="flashing lime lighten-5">
-                    <i class="material-icons small">error_outline</i> <span class="flashing-message">{{ message }}</span>
+                    <i class="material-icons small">error_outline</i> <span
+                        class="flashing-message">{{ message }}</span>
                 </div>
             {% endfor %}
         </div>
@@ -68,6 +69,9 @@
     document.addEventListener('DOMContentLoaded', function () {
         var elems = document.querySelectorAll('.dropdown-trigger');
         M.Dropdown.init(elems, {});
+
+        var elems = document.querySelectorAll('select');
+        var instances = M.FormSelect.init(elems, {});
     });
 </script>
 </body>
