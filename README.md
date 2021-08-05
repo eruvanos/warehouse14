@@ -1,3 +1,5 @@
+[![Updates](https://pyup.io/repos/github/eruvanos/warehouse14/shield.svg)](https://pyup.io/repos/github/eruvanos/warehouse14/)
+
 # Warehouse14
 
 While the PyPI (Warehouse) provides a global package index for all Python users, companies and closed groups do have the
