@@ -33,5 +33,3 @@ async def test_manage_project(server, authenticator, page):
 
     # Create project button not shown
     assert len(await page.querySelectorAll("#create-project-btn")) == 0
-
-    await browser.close()
