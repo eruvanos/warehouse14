@@ -53,11 +53,19 @@ def extract_metadata(form: MultiDict):
 
 
 def create_blueprint(
-    db: DBBackend, storage: PackageStorage, allow_project_creation: bool = False
+    db: DBBackend, storage: PackageStorage,
+        allow_project_creation: bool = False,
+        restrict_project_creation=None
 ):
     app = Blueprint("simple", __name__)
     token_auth = HTTPBasicAuth()
     log = logging.getLogger(__name__)
+
+    def check_project_creation_allowed(username):
+        if not allow_project_creation:
+            return False
+
+        return restrict_project_creation is None or username in restrict_project_creation
 
     @token_auth.verify_password
     def verify_password(username, password):
@@ -216,7 +224,7 @@ def create_blueprint(
         # get or create project
         project = db.project_get(project_name)
         if project is None:
-            if not allow_project_creation:
+            if not check_project_creation_allowed(username):
                 log.warning(f"No permission to create a new project via direct upload.")
                 abort(401, f"No permission to create a new project via direct upload.")
             else:

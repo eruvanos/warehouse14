@@ -2,13 +2,14 @@ import datetime
 import secrets
 from collections import defaultdict
 from operator import attrgetter
+from typing import Optional, List
 from uuid import uuid4
 
 import pypitoken
 import readme_renderer.markdown
 import readme_renderer.rst
 import readme_renderer.txt
-from flask import Flask, render_template, redirect, url_for, abort, request, g, flash
+from flask import Flask, render_template, redirect, url_for, abort, request, flash
 from flask_login import LoginManager, login_required, current_user, logout_user
 from flaskext.markdown import Markdown
 
@@ -33,15 +34,19 @@ def create_app(
     db: DBBackend,
     storage: PackageStorage,
     auth: Authenticator,
-    config: dict = None,
-    allow_project_creation=False,
+    app_config: dict = None,
+    restrict_project_creation: Optional[List[str]] = None,
+    simple_api_allow_project_creation=False,
+    **kwargs,
 ):
     app = Flask(__name__)
-    if config:
-        app.config.update(**config)
+    if app_config:
+        app.config.update(**app_config)
     Markdown(app, extensions=["footnotes", "fenced_code"])
 
     log = app.logger
+    if kwargs:
+        log.warning(f"Unused options passed {list(kwargs.keys())}")
 
     # Setup Login and authentication
     login_manager = LoginManager(app)
@@ -57,12 +62,15 @@ def create_app(
     auth.init_app(app)
 
     simple_blueprint = simple_api.create_blueprint(
-        db, storage, allow_project_creation=allow_project_creation
+        db, storage, allow_project_creation=simple_api_allow_project_creation
     )
     app.register_blueprint(simple_blueprint)
 
     def get_user_id():
         return current_user.account.name
+
+    def check_project_creation_allowed():
+        return restrict_project_creation is None or get_user_id() in restrict_project_creation
 
     @app.route("/logout")
     @login_required
@@ -140,8 +148,11 @@ def create_app(
             project for project in db.project_list() if project.visible(get_user_id())
         ]
         own_projects.sort(key=attrgetter("name"))
-
-        return render_template("project/projects.html", projects=own_projects)
+        return render_template(
+            "project/projects.html",
+            projects=own_projects,
+            show_create=check_project_creation_allowed(),
+        )
 
     @app.get("/projects/<project_name>")
     @login_required
@@ -190,6 +201,10 @@ def create_app(
     @app.route("/create_project", methods=["GET", "POST"])
     @login_required
     def create_project():
+        if not check_project_creation_allowed():
+            flash("Project creation restricted to specific users.")
+            return redirect(url_for("list_projects"))
+
         form = CreateProjectForm()
         if form.validate_on_submit():
             project = db.project_save(
@@ -241,7 +256,7 @@ def create_app(
     def project_users_add(project_name):
         project = db.project_get(project_name)
         if not project.is_admin(get_user_id()):
-            abort(401, 'You are not an admin, what are you doing here?')
+            abort(401, "You are not an admin, what are you doing here?")
 
         new_user = request.form.get("username")
         new_role = request.form.get("role")
@@ -273,7 +288,7 @@ def create_app(
     def project_users_remove(project_name, username):
         project = db.project_get(project_name)
         if not project.is_admin(get_user_id()):
-            abort(401, 'You are not an admin, what are you doing here?')
+            abort(401, "You are not an admin, what are you doing here?")
 
         if username in project.admins:
             # Never delete the last admin!

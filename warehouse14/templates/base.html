@@ -26,8 +26,11 @@
     <div class="nav-wrapper">
         <a href="#" class="brand-logo center">Warehouse14</a>
         <ul id="nav-mobile" class="right">
-            <li><a class="dropdown-trigger" href="#" data-target="user-dropdown">{{ current_user.account.name }}<i
-                    class="material-icons right">arrow_drop_down</i></a></li>
+            <li>
+                <a class="dropdown-trigger" href="#" data-target="user-dropdown">
+                <span id="username">{{ current_user.account.name }}</span>
+                <i class="material-icons right">arrow_drop_down</i></a>
+            </li>
         </ul>
         <ul id="nav-mobile" class="left">
             <li class="{{ 'active' if active_page == 'home' }}"><a href="/">Home</a></li>
