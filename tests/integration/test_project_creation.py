@@ -25,25 +25,18 @@ def server(tmpdir, db, storage, authenticator):
 
 
 @pytest.mark.asyncio
-async def test_title(server, authenticator):
-    browser = await launch({"headless": True})
-    page = await browser.newPage()
-
+async def test_title(server, authenticator, page):
     await login(page, server.url, "user1")
 
     await page.goto(server.url)
 
     title = await page.title()
     assert title == "Warehouse14"
-    await browser.close()
 
 
 @pytest.mark.asyncio
-async def test_manage_project(server, authenticator):
-    browser = await launch({"headless": True})
-
+async def test_manage_project(server, authenticator, page):
     # Open product page
-    page = await browser.newPage()
     await login(page, server.url, "user1")
 
     await page.goto(server.url + "/projects")
@@ -76,5 +69,3 @@ async def test_manage_project(server, authenticator):
     await page.click("#project-member-example-user-remove")
     members = await get_texts(page, ".member")
     assert "example-user" not in members
-
-    await browser.close()

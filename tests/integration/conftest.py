@@ -68,3 +68,11 @@ def db(table) -> DBBackend:
 @pytest.fixture
 def storage(bucket) -> PackageStorage:
     return S3Storage(bucket)
+
+@pytest.fixture
+async def page():
+    from pyppeteer import launch
+    browser = await launch({"headless": True})
+    yield (await browser.pages())[0]
+
+    await browser.close()
