@@ -27,8 +27,16 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        python -m pip install poetry
+        python -m pip install poetry coveralls pytest-cov
         poetry install
+      env:
+        POETRY_VIRTUALENVS_CREATE: false
     - name: Test with pytest
       run: |
-        poetry run pytest
+        pytest --cov=warehouse14
+      env:
+        POETRY_VIRTUALENVS_CREATE: false
+    - name: Coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
