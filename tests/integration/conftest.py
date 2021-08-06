@@ -4,6 +4,11 @@ import boto3
 import pytest
 from moto import mock_dynamodb2, mock_s3
 
+from tests.local_login import MockAuthenticator
+from warehouse14 import DBBackend, PackageStorage
+from warehouse14.repos_dynamo import DynamoDBBackend
+from warehouse14.storage import S3Storage
+
 
 @pytest.fixture
 def bucket():
@@ -48,3 +53,18 @@ def table():
                 }
             ],
         )
+
+
+@pytest.fixture
+def authenticator():
+    return MockAuthenticator()
+
+
+@pytest.fixture
+def db(table) -> DBBackend:
+    return DynamoDBBackend(table)
+
+
+@pytest.fixture
+def storage(bucket) -> PackageStorage:
+    return S3Storage(bucket)

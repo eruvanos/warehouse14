@@ -1,4 +1,4 @@
-[![Updates](https://pyup.io/repos/github/eruvanos/warehouse14/shield.svg)](https://pyup.io/repos/github/eruvanos/warehouse14/)
+[![Coverage Status](https://coveralls.io/repos/github/eruvanos/warehouse14/badge.svg?branch=main)](https://coveralls.io/github/eruvanos/warehouse14?branch=main)[![Updates](https://pyup.io/repos/github/eruvanos/warehouse14/shield.svg)](https://pyup.io/repos/github/eruvanos/warehouse14/)
 
 # Warehouse14
 
@@ -52,7 +52,7 @@ db = DynamoDBBackend(table)
 bucket = boto3.resource("s3").Bucket("<bucket name>")
 storage = S3Storage(bucket)
 
-app = create_app(db, storage, auth, config={"SECRET_KEY": "{{ LONG_RANDOM_STRING }}"})
+app = create_app(db, storage, auth, app_config={"SECRET_KEY": "{{ LONG_RANDOM_STRING }}"})
 lambda_handler = make_lambda_handler(app, binary_support=True)
 ```
 

@@ -6,3 +6,5 @@
 
 .pytest_cache
 dist/
+
+!fixtures/mypkg/dist

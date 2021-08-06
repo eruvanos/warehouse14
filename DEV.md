@@ -1,5 +1,15 @@
 # Warehouse14 Developer information
 
+## Run local instance for testing
+
+`run_local.py` starts local test setup with dynamodb and s3.
+For login, a simple formfield is provided.
+
+```bash
+python run_local.py
+```
+
+
 ## Commands
 
 ### Generate code highlighting
@@ -55,25 +65,57 @@ The `next` url is not validated (Like recommended in Flask-Login), because it is
 
 ### DynamoDB Schema
 ```markdown
-all_projects: 
-    query(sk: account#account1 & begins_with(PK, project#)) 
-    & 
-    query(sk: account#publicacc & begins_with(PK, project#))
-
-# PK                SK (GSI)
+# PK                             SK (GSI)                        TK      ATTRS
 
 # store project and project permissions
-project#project1    project#project1       {name: str, versions: Dict(str, Version)}
-project#project1    account#account1       {role: admin}
-project#project1    account#account2       {role: member}
-project#project1    account#public         {role: member}
+project#project1                 project#project1                       {name: str, versions: Dict(str, Version)}   isarchived=True
+project#project1                 account#account1                       {role: admin}
+project#project1                 account#account2                       {role: member}
+project#project1                 account#public                         {role: member}
+                                                                                     
+project#project2                 account#account1                       {role: admin}
 
-# project versions?
-project#project1    version#0.0.1#         {role: member}
+# Group                                                                           
+project#project1                 group#group1                           {role: member}
+group#group1                     account#account1                       {role: admin}
+group#group1                     account#account2                       {role: member}
+// Permission per account for project
+project#project1#group#group1    account#account1                       {role: member}
 
 # store accounts and tokens
-account#account1    account#account1
-account#account1    token#token1
-account#account1    token#token2
+account#account1                 account#account1                        {...}
+account#account1                 token#token1                            {...}
+account#account1                 token#token2                            {...}
+
+# project versions?
+project#project1                 version#0.0.1#                          {role: member}
+
+# Glocbal Secondary Index:
+_: pk -> sk
+sk_gis: sk -> pk
+```
+
+### Project Query
+```
+query(sk=account#account1 & begins_with(PK, project#)) 
+& 
+query(sk=account#publicacc & begins_with(PK, project#))
+```
+
+### Group Queries
+- **get group projects**: `query[sk_gis](sk=group_key & pk startswith 'project#')`
+- **get group members**: `query[pk_gis](pk=group_key & sk startswith 'account#')`
+
+### Group Actions
+- Add    Member to Group: 
+  **get group projects**, write item for each project
+- Remove Member from Group
+  **get group projects**, delete item for each project
+- Add group to project:
+  **get group members**, write item for each member
+- Remove project:
+  **get group members**, delete item for each member
+- Change Group Permission for a project:
+  **get group members**, update item for each member
 ```
 

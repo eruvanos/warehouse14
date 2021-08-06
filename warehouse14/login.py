@@ -47,7 +47,9 @@ class OIDCAuthenticator(Authenticator):
         kwargs are passed to the underlying authlib client if they are listed in OAUTH_CLIENT_PARAMS.
         """
         self.oauth = None
-        self.oidc_config = {k: v for k, v in kwargs.items() if k in OAUTH_CLIENT_PARAMS}
+
+        valid_oidc_parameters = OAUTH_CLIENT_PARAMS + ("user_id_field",)
+        self.oidc_config = {k: v for k, v in kwargs.items() if k.lower() in valid_oidc_parameters}
 
         if app:
             self.init_app(app)
