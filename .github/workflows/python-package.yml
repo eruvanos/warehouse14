@@ -10,13 +10,13 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  test:
 
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        python-version: [3.7, 3.8, 3.9]
+        python-version: [3.8, 3.9]
 
     steps:
     - uses: actions/checkout@v2
@@ -36,7 +36,21 @@ jobs:
         pytest --cov=warehouse14
       env:
         POETRY_VIRTUALENVS_CREATE: false
-    - name: Coveralls
-      uses: coverallsapp/github-action@master
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Upload coverage data to coveralls.io
+      run: coveralls --service=github
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        COVERALLS_FLAG_NAME: ${{ matrix.test-name }}
+        COVERALLS_PARALLEL: true
+  coveralls:
+    name: Indicate completion to coveralls.io
+    needs: test
+    runs-on: ubuntu-latest
+    container: python:3-slim
+    steps:
+      - name: Finished
+        run: |
+          pip3 install --upgrade coveralls
+          coveralls --service=github --finish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
