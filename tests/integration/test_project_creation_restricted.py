@@ -25,11 +25,8 @@ def server(tmpdir, db, storage, authenticator):
 
 
 @pytest.mark.asyncio
-async def test_manage_project(server, authenticator):
-    browser = await launch({"headless": True})
-
+async def test_manage_project(server, authenticator, page):
     # Open product page
-    page = await browser.newPage()
     await login(page, server.url, "user1")
 
     await page.goto(server.url + "/projects")
