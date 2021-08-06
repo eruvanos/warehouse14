@@ -31,4 +31,5 @@ jobs:
         poetry install
     - name: Test with pytest
       run: |
+        poetry run ls -lah
         poetry run pytest
