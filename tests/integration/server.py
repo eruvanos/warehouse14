@@ -1,16 +1,21 @@
+import os
 from threading import Thread
 
 import requests
-from flask import request
+from flask import request, Flask
 
 
 class FlaskTestServer(Thread):
-    def __init__(self, app, port=5000):
+    def __init__(self, app: Flask, port=5000):
         super().__init__(daemon=True)
         self.port = port
         self.app = app
-        self.url = "http://localhost:%s" % self.port
 
+        # Disable banners
+        os.environ["WERKZEUG_RUN_MAIN"] = "true"
+        self.app.env = "development"
+
+        self.url = "http://localhost:%s" % self.port
         self.app.add_url_rule("/shutdown", view_func=self._shutdown_server)
 
     @staticmethod
