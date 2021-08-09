@@ -23,8 +23,8 @@ async def get_texts(page: Page, selector: str) -> List[str]:
             text = await get_text_of_element(page, element)
             if text:
                 texts.append(text)
-    except pyppeteer.errors.NetworkError:
-        pass
+    except pyppeteer.errors.NetworkError as e:
+        print(e)
     return texts
 
 

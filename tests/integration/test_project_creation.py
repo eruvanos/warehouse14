@@ -64,7 +64,7 @@ async def test_manage_project(server, authenticator, page):
     await page.type("input[name=username]", "example-user")
     await page.click("button[type='submit']")
     members = await get_texts(page, ".member")
-    assert "example-user" in members
+    assert "example-user" in members, page.url
 
     # Remove Member
     await page.click("#project-member-example-user-remove")
