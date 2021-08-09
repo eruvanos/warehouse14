@@ -8,3 +8,5 @@
 dist/
 
 !fixtures/mypkg/dist
+
+__pycache__
