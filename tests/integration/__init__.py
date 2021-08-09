@@ -19,6 +19,7 @@ async def _evaluate(page, script, element, retries=0):
         await asyncio.sleep(0.5)
         return await _evaluate(page, script, element, retries + 1)
 
+
 async def get_text_of_element(page, element: ElementHandle) -> Optional[str]:
     if element is None:
         return None
@@ -39,6 +40,13 @@ async def get_texts(page: Page, selector: str) -> List[str]:
     except pyppeteer.errors.NetworkError as e:
         print(e)
     return texts
+
+
+async def click(page, selector):
+    await asyncio.wait([
+        page.click(selector),
+        page.waitForNavigation(),
+    ])
 
 
 async def login(page: Page, server_url, username):
