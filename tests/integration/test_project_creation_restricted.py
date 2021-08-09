@@ -18,6 +18,7 @@ def server(tmpdir, db, storage, authenticator):
 
     server = FlaskTestServer(app, port=FlaskTestServer.get_open_port())
     server.start()
+    server.wait()
     yield server
     server.shutdown_server()
 
