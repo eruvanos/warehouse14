@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [3.8, 3.9]
+        python-version: [3.9]
 
     steps:
     - uses: actions/checkout@v2
@@ -27,30 +27,12 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        python -m pip install poetry coveralls pytest-cov
+        python -m pip install poetry
         poetry install
       env:
         POETRY_VIRTUALENVS_CREATE: false
     - name: Test with pytest
       run: |
-        pytest --cov=warehouse14 -m "integration"
+        pytest -m "integration"
       env:
         POETRY_VIRTUALENVS_CREATE: false
-    - name: Upload coverage data to coveralls.io
-      run: coveralls --service=github
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        COVERALLS_FLAG_NAME: ${{ matrix.test-name }}
-        COVERALLS_PARALLEL: true
-  coveralls:
-    name: Indicate completion to coveralls.io
-    needs: test
-    runs-on: ubuntu-latest
-    container: python:3-slim
-    steps:
-      - name: Finished
-        run: |
-          pip3 install --upgrade coveralls
-          coveralls --service=github --finish
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
