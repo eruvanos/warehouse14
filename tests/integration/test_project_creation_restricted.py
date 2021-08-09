@@ -18,7 +18,7 @@ def server(tmpdir, db, storage, authenticator):
     app.debug = False
     app.secret_key = "Secret"
 
-    server = FlaskTestServer(app, port=5001)
+    server = FlaskTestServer(app, port=FlaskTestServer.get_open_port())
     server.start()
     yield server
     server.shutdown_server()
