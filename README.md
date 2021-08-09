@@ -1,6 +1,6 @@
 [![Coverage Status](https://coveralls.io/repos/github/eruvanos/warehouse14/badge.svg?branch=main)](https://coveralls.io/github/eruvanos/warehouse14?branch=main)
 [![Updates](https://pyup.io/repos/github/eruvanos/warehouse14/shield.svg)](https://pyup.io/repos/github/eruvanos/warehouse14/)
-[![Python package](https://github.com/eruvanos/warehouse14/actions/workflows/python-package.yml/badge.svg)](https://github.com/eruvanos/warehouse14/actions/workflows/python-package.yml)
+[![Unit Tests](https://github.com/eruvanos/warehouse14/actions/workflows/python-unittests.yml/badge.svg)](https://github.com/eruvanos/warehouse14/actions/workflows/python-unittests.yml)
 
 # Warehouse14
 
