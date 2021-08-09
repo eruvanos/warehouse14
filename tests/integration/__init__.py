@@ -52,7 +52,7 @@ async def click(page, selector):
 async def login(page: Page, server_url, username):
     await page.goto(f"{server_url}")
     await page.type("input[name=username]", username)
-    await page.click("button[type=submit]")
+    await click(page, "button[type=submit]")
 
     actual_username = await get_text(page, "#username")
     assert username == actual_username
