@@ -1,4 +1,5 @@
 import os
+import sys
 from threading import Thread
 
 import requests
@@ -12,11 +13,23 @@ class FlaskTestServer(Thread):
         self.app = app
 
         # Disable banners
-        os.environ["WERKZEUG_RUN_MAIN"] = "true"
+        cli = sys.modules['flask.cli']
+        cli.show_server_banner = lambda *x: None
         self.app.env = "development"
 
         self.url = "http://localhost:%s" % self.port
         self.app.add_url_rule("/shutdown", view_func=self._shutdown_server)
+
+    @staticmethod
+    def get_open_port():
+        import socket
+
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.bind(("", 0))
+        s.listen(1)
+        port = s.getsockname()[1]
+        s.close()
+        return port
 
     @staticmethod
     def _shutdown_server():
@@ -30,4 +43,4 @@ class FlaskTestServer(Thread):
         self.join(30)
 
     def run(self):
-        self.app.run(port=self.port)
+        self.app.run(host="127.0.0.1", port=self.port)
