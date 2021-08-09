@@ -1,5 +1,6 @@
-from typing import Optional
+from typing import Optional, List
 
+import pyppeteer
 from pyppeteer.element_handle import ElementHandle
 from pyppeteer.page import Page
 
@@ -15,12 +16,15 @@ async def get_text(page, selector: str) -> Optional[str]:
     return await get_text_of_element(page, await page.querySelector(selector))
 
 
-async def get_texts(page: Page, selector: str) -> Optional[str]:
+async def get_texts(page: Page, selector: str) -> List[str]:
     texts = []
-    for element in await page.querySelectorAll(selector):
-        text = await get_text_of_element(page, element)
-        if text:
-            texts.append(text)
+    try:
+        for element in await page.querySelectorAll(selector):
+            text = await get_text_of_element(page, element)
+            if text:
+                texts.append(text)
+    except pyppeteer.errors.NetworkError:
+        pass
     return texts
 
 
