@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.11
+- improved setup (default to random session secret)
+- allow only specific users to create new projects
+- improved user management UI
+- preparation for groups
+
 ## 0.1.10
 - improve OIDC configuration code
 - restrict user management 🥶

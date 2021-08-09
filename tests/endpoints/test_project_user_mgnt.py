@@ -1,4 +1,3 @@
-import secrets
 from operator import attrgetter
 
 import requests_html
@@ -15,7 +14,6 @@ from warehouse14 import create_app
 def app(db, storage, authenticator):
     app = create_app(db, storage, authenticator)
     app.debug = True
-    app.secret_key = secrets.token_hex(16)
     return app
 
 

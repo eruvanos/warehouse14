@@ -24,7 +24,7 @@ class DBBackend(ABC):
 
     @abstractmethod
     def account_token_add(
-            self, user_id: str, token_id: str, name: str, key: str
+        self, user_id: str, token_id: str, name: str, key: str
     ) -> Optional[Token]:
         """
         Add a new API Token to an account

@@ -24,10 +24,12 @@ if __name__ == "__main__":
 
         auth = MockAuthenticator()  # redirects to form page, local login
         app = create_app(
-            db, storage, auth,
-            app_config={"SECRET_KEY": "secret!"},
+            db,
+            storage,
+            auth,
+            session_secret="Secret!",
             simple_api_allow_project_creation=False,
-            restrict_project_creation=None
+            restrict_project_creation=None,
         )
         app.debug = True
         app.templates_auto_reload = True

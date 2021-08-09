@@ -54,7 +54,7 @@ db = DynamoDBBackend(table)
 bucket = boto3.resource("s3").Bucket("<bucket name>")
 storage = S3Storage(bucket)
 
-app = create_app(db, storage, auth, app_config={"SECRET_KEY": "{{ LONG_RANDOM_STRING }}"})
+app = create_app(db, storage, auth, session_secret="{{ LONG_RANDOM_STRING }}")
 lambda_handler = make_lambda_handler(app, binary_support=True)
 ```
 

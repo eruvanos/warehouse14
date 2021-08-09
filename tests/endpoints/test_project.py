@@ -1,5 +1,3 @@
-import secrets
-
 import requests_html
 from pytest import fixture
 from requests_html import HTMLResponse
@@ -14,7 +12,6 @@ from warehouse14 import create_app, Project
 def app(db, storage, authenticator):
     app = create_app(db, storage, authenticator)
     app.debug = True
-    app.secret_key = secrets.token_hex(16)
     return app
 
 
@@ -23,7 +20,6 @@ def html_client(app) -> requests_html.HTMLSession:
     session = requests_html.HTMLSession()
     session.mount("http://localhost", WSGIAdapter(app))
     return session
-
 
 
 def test_show_start_page_with_text(html_client, app):
@@ -59,6 +55,6 @@ def test_project_page_shows_details(html_client, app, db, storage):
 
     assert res.status_code == 200, res.text
     assert (
-            f"pip install --extra-index-url http://localhost/simple/ {project.name}"
-            in res.html.find(".nav-content", first=True).text
+        f"pip install --extra-index-url http://localhost/simple/ {project.name}"
+        in res.html.find(".nav-content", first=True).text
     )
