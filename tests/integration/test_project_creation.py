@@ -25,6 +25,7 @@ def server(tmpdir, db, storage, authenticator):
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_title(server, authenticator, page):
     await login(page, server.url, "user1")
 
@@ -35,6 +36,7 @@ async def test_title(server, authenticator, page):
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_manage_project(server, authenticator, page):
     # Open product page
     await login(page, server.url, "user1")
