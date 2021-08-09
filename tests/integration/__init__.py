@@ -1,3 +1,4 @@
+import asyncio
 from typing import Optional, List
 
 import pyppeteer
@@ -5,11 +6,23 @@ from pyppeteer.element_handle import ElementHandle
 from pyppeteer.page import Page
 
 
+async def _evaluate(page, script, element, retries=0):
+    """
+    https://github.com/miyakogi/pyppeteer/issues/63#issuecomment-388647523
+    """
+    if retries > 10:
+        return await page.evaluate(script, element)
+
+    try:
+        return await page.evaluate(script, element)
+    except pyppeteer.errors.NetworkError:
+        await asyncio.sleep(0.5)
+        return await _evaluate(page, script, element, retries + 1)
+
 async def get_text_of_element(page, element: ElementHandle) -> Optional[str]:
     if element is None:
         return None
-
-    return await page.evaluate("(element) => element.textContent", element)
+    return await _evaluate(page, "(element) => element.textContent", element)
 
 
 async def get_text(page, selector: str) -> Optional[str]:
