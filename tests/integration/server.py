@@ -13,7 +13,7 @@ class FlaskTestServer(Thread):
         self.app = app
 
         # Disable banners
-        cli = sys.modules['flask.cli']
+        cli = sys.modules["flask.cli"]
         cli.show_server_banner = lambda *x: None
         self.app.env = "development"
 

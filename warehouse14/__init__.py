@@ -34,12 +34,14 @@ def create_app(
     db: DBBackend,
     storage: PackageStorage,
     auth: Authenticator,
+    session_secret: str = secrets.token_hex(16),
     app_config: dict = None,
     restrict_project_creation: Optional[List[str]] = None,
     simple_api_allow_project_creation=False,
     **kwargs,
 ):
     app = Flask(__name__)
+    app.secret_key = session_secret
     if app_config:
         app.config.update(**app_config)
     Markdown(app, extensions=["footnotes", "fenced_code"])
@@ -70,7 +72,10 @@ def create_app(
         return current_user.account.name
 
     def check_project_creation_allowed():
-        return restrict_project_creation is None or get_user_id() in restrict_project_creation
+        return (
+            restrict_project_creation is None
+            or get_user_id() in restrict_project_creation
+        )
 
     @app.route("/logout")
     @login_required

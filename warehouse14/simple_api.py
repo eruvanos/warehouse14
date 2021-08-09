@@ -53,9 +53,10 @@ def extract_metadata(form: MultiDict):
 
 
 def create_blueprint(
-    db: DBBackend, storage: PackageStorage,
-        allow_project_creation: bool = False,
-        restrict_project_creation=None
+    db: DBBackend,
+    storage: PackageStorage,
+    allow_project_creation: bool = False,
+    restrict_project_creation=None,
 ):
     app = Blueprint("simple", __name__)
     token_auth = HTTPBasicAuth()
@@ -65,7 +66,9 @@ def create_blueprint(
         if not allow_project_creation:
             return False
 
-        return restrict_project_creation is None or username in restrict_project_creation
+        return (
+            restrict_project_creation is None or username in restrict_project_creation
+        )
 
     @token_auth.verify_password
     def verify_password(username, password):

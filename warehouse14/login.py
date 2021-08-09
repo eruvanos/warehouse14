@@ -49,7 +49,9 @@ class OIDCAuthenticator(Authenticator):
         self.oauth = None
 
         valid_oidc_parameters = OAUTH_CLIENT_PARAMS + ("user_id_field",)
-        self.oidc_config = {k: v for k, v in kwargs.items() if k.lower() in valid_oidc_parameters}
+        self.oidc_config = {
+            k: v for k, v in kwargs.items() if k.lower() in valid_oidc_parameters
+        }
 
         if app:
             self.init_app(app)

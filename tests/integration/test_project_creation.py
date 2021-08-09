@@ -1,5 +1,4 @@
 import pytest
-from pyppeteer import launch
 
 from tests.integration import login, get_texts
 from tests.integration.server import FlaskTestServer
@@ -13,10 +12,9 @@ def server(tmpdir, db, storage, authenticator):
         storage,
         authenticator,
         restrict_project_creation=None,
-        simple_api_allow_project_creation=False
+        simple_api_allow_project_creation=False,
     )
     app.debug = False
-    app.secret_key = "Secret"
 
     server = FlaskTestServer(app, port=FlaskTestServer.get_open_port())
     server.start()

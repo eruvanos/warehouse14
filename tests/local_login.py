@@ -1,5 +1,13 @@
 import flask_login
-from flask import request, render_template_string, redirect, session, url_for, Response, Flask
+from flask import (
+    request,
+    render_template_string,
+    redirect,
+    session,
+    url_for,
+    Response,
+    Flask,
+)
 
 from warehouse14 import Authenticator
 
