@@ -29,10 +29,17 @@
             </ul>
         {% else %}
             <div class="">
-                <div class="card-panel grey lighten-3">
-                    <h6 class="">No projects visible for you, <a href="{{ url_for('create_project') }}">create</a> your
-                        own ones.</h6>
-                </div>
+                {% if show_create %}
+                    <div class="card-panel grey lighten-3">
+                        <h6 class="">No projects visible for you, <a href="{{ url_for('create_project') }}">create</a>
+                            your
+                            own ones.</h6>
+                    </div>
+                {% else %}
+                    <div class="card-panel grey lighten-3">
+                        <h6 class="">No projects visible for you, in case you would like to create one, please contact your support.</h6>
+                    </div>
+                {% endif %}
             </div>
         {% endif %}
 
