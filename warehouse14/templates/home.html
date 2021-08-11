@@ -4,30 +4,32 @@
 {% block content %}
 
     <div class="container">
-        <h1>Home</h1>
+        <div class="row">
+            <div class="col s12 push-m2 m8">
+                <h4>Welcome to our internal Python Package Index.</h4>
+                <div class="card">
+                    <div class="card-content">
+                        <p>We provide inner source libraries of others and you can share your own.</p>
+                        <p>Please visit <a href="https://pypi.org/project/warehouse14/">Warehouse14</a> for information
+                            about this tool.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        <p class="important">
-            Welcome to our internal Python Package Index.
-            You can search for inner source libraries or share your own.
-        </p>
-        <p class="important">
-            For team internal libraries, you can keep your packages secret.
-            Names of private packages are reserved in case you want to make them public at some point in time.
-        </p>
-        <p class="important">
-            The <a href="https://www.python.org/dev/peps/pep-0423/#top-level-namespace-relates-to-code-ownership">PEP 423</a>
-            explains a few rules about ownership. In short packages owned by a company, even if they are stored in private repositories,
-            they should live within a namespace. This is not only a nice thing to have, but it also provides a few security benefits.
-        </p>
-        <p class="important">
-            Place your package within an appropriate namespace!
-        </p>
+        <div class="row">
+            <div class="col s12 push-m2  m8">
+                <div class="card">
+                    <div class="card-content">
+                        <p>To install packages or publish your own, you will need an API token and configure your
+                            toolchain.</p>
+                    </div>
+                    <div class="card-action center">
+                        <a href="{{ url_for("account_token") }}">Create an API token</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
-
-
-
-
-
-
-
 {% endblock %}

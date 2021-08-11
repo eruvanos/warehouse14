@@ -29,7 +29,7 @@ if __name__ == "__main__":
             auth,
             session_secret="Secret!",
             simple_api_allow_project_creation=False,
-            restrict_project_creation=None,
+            restrict_project_creation=["Admin"],
         )
         app.debug = True
         app.templates_auto_reload = True

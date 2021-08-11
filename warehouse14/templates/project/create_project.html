@@ -6,36 +6,74 @@
 {% block content %}
 
     <div class="container">
-        <h1>Create Project</h1>
-
-        <form method="POST" action="#">
-            {{ form.csrf_token }}
-
-            <div class="row">
-                <div class="input-field col s6">
-                    {{ form.name(size=20) }}
-                    {{ form.name.label }}
-                </div>
+        <div class="row">
+            <div class="col s12 m8">
+                <h1 class="">Create Project</h1>
             </div>
+        </div>
 
-            <div class="row">
-                {% for mode in form.public %}
-                    <div class="col s3">
-                        <label>
-                            {{ mode }}
-                            <span>{{ mode.label.text }}</span>
-                        </label>
+        <div class="row">
+            <div class="col s12 m8">
+                <div class="card">
+                    <div class="card-content">
+                        <h5>Naming your project</h5>
+                        <p class="">
+                            In <a
+                                href="https://www.python.org/dev/peps/pep-0423/#top-level-namespace-relates-to-code-ownership">PEP
+                            423</a>
+                            Python explains a few rules about ownership. In short packages owned by a company, even if
+                            they are
+                            stored in private repositories,
+                            they should live within a namespace. This is not only a nice thing to have, but it also
+                            provides a few security benefits. Place your package within an appropriate namespace!
+                        </p>
+                        <p>
+                            Recommendation: <xmp><company>.<team>.<name></xmp>
+                        </p>
                     </div>
-                {% endfor %}
-            </div>
+                </div>
 
-            <div class="row">
-                <button class="btn waves-effect waves-light col s2 offset-s4 white-text" type="submit" name="action">Create
-                    <i class="material-icons right">send</i>
-                </button>
-            </div>
 
-        </form>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col s12 m8">
+                <form method="POST" action="#">
+                    <div class="card">
+                        <div class="card-content">
+                            {{ form.csrf_token }}
+
+                            <div class="row">
+                                <div class="input-field col s6">
+                                    {{ form.name(size=20) }}
+                                    {{ form.name.label }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                {% for mode in form.public %}
+                                    <div class="col s3">
+                                        <label>
+                                            {{ mode }}
+                                            <span>{{ mode.label.text }}</span>
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+
+                            <div class="card-action center-align">
+                                <button class="btn waves-effect waves-light white-text" type="submit"
+                                        name="action">Create
+                                    <i class="material-icons right">send</i>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
 
 
     </div>
