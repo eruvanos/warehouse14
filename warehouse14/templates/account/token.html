@@ -30,7 +30,7 @@
             </div>
             <div class="row">
                 <div class="col s12">
-                    <div class="card-panel red darken-3"><span class="white-text">
+                    <div class="card-panel red accent-2"><span class="white-text">
                        For security reasons this token will only appear once. Copy it now.
                     </span>
                     </div>
@@ -39,8 +39,7 @@
 
             <div class="divider"></div>
 
-            <h5>Using this token</h5>
-            <p>To use this API token:</p>
+            <h5>How to use this token:</h5>
             <ul>
                 <li>Set your username to <code>__token__</code></li>
                 <li>Set your password to the token value, including the
@@ -48,18 +47,33 @@
                 </li>
             </ul>
 
+            {# Pip #}
+            <div class="divider"></div>
+            <h5>Configure PIP:</h5>
             <p>
-                If you are using <a href="https://pypi.org/project/poetry/">Poetry</a> to publish your
+                To install packages prom this index, you will have to configure an extra index url for pip.
+            </p>
+            <pre class="code-block">pip config set global.extra-index-url https://__token__:{{ token_raw }}@{{ url_for('simple.simple_index', _external=True) }}</pre>
+
+            {# Poetry #}
+            <div class="divider"></div>
+            <h5>Configure Poetry:</h5>
+            <p>
+                If use <a href="https://pypi.org/project/poetry/">Poetry</a> to upload your
                 projects, use the following commands to configure:
             </p>
 
             <pre class="code-block">
 poetry config repositories.warehouse14 {{ url_for('simple.simple_index', _external=True) }}
 poetry config http-basic.warehouse14 __token__ "{{ token_raw }}"</pre>
+            <p>Publish your projects with: <code>poetry publish -r warehouse14</code></p>
 
+            {# Twine #}
+            <div class="divider"></div>
+            <h5>Configure Twine:</h5>
             <p>
-                For example, if you are using <a href="https://pypi.org/project/twine/">Twine</a> to upload your
-                projects to PyPI, set up your <code>$HOME/.pypirc</code> file like this:
+                For example, if you use <a href="https://pypi.org/project/twine/">Twine</a> to upload your
+                projects, set up your <code>$HOME/.pypirc</code> file like this:
             </p>
 
             <pre class="code-block">
@@ -67,24 +81,17 @@ poetry config http-basic.warehouse14 __token__ "{{ token_raw }}"</pre>
   index-servers =
     pypi
     warehouse14
-    PROJECT_NAME
 
 [warehouse14]
-  username = __token__
-  password = # either a user-scoped token or a project-scoped token you want to set as the default
-
-[PROJECT_NAME]
   repository = {{ url_for('simple.simple_index', _external=True) }}
   username = __token__
   password = {{ token_raw }}
+
             </pre>
 
             <p>
-                You can then use <code>twine --repository PROJECT_NAME</code> to switch to the correct token when
-                uploading to PyPI.
+                Now use <code>twine --repository warehouse14</code> to upload your package.
             </p>
-            <p>For further instructions on how to use this token, visit the PyPI help page.</p>
-
             <div class="divider"></div>
 
         {% else %}
