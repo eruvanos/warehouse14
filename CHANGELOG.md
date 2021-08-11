@@ -3,6 +3,7 @@
 ## 0.1.12
 - improve token information page
 - improved information for wrong token login
+- improved user flow
 
 ## 0.1.11
 - improved setup (default to random session secret)
