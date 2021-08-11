@@ -70,6 +70,11 @@ def create_blueprint(
             restrict_project_creation is None or username in restrict_project_creation
         )
 
+    @token_auth.error_handler
+    def error_handler(status):
+        return ("Unauthorized: please create an API token using your account page. "
+                "Also check that you use '__token__' as username."), status
+
     @token_auth.verify_password
     def verify_password(username, password):
         """
@@ -81,7 +86,7 @@ def create_blueprint(
         """
         try:
             if username and username != "__token__":
-                log.warning(f"Access without proper token {username}")
+                log.warning(f"Access without proper token username {username}")
                 return None
 
             token = Token.load(password)

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.12
+- improve token information page
+- improved information for wrong token login
+
 ## 0.1.11
 - improved setup (default to random session secret)
 - allow only specific users to create new projects

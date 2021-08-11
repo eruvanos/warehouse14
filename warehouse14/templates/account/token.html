@@ -53,7 +53,7 @@
             <p>
                 To install packages prom this index, you will have to configure an extra index url for pip.
             </p>
-            <pre class="code-block">pip config set global.extra-index-url https://__token__:{{ token_raw }}@{{ url_for('simple.simple_index', _external=True) }}</pre>
+            <pre class="code-block">pip config set global.extra-index-url {{ url_for('simple.simple_index', _external=True).split("//")[0] }}//__token__:{{ token_raw }}@{{ url_for('simple.simple_index', _external=True).split("//")[1] }}</pre>
 
             {# Poetry #}
             <div class="divider"></div>
