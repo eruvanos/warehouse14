@@ -20,13 +20,13 @@
         </div>
 
         <div class="row">
-            <div class="col s12">
+            <div id="account-tokens" class="col s12">
                 <h4>API Tokens</h4>
                 {% if tokens %}
                     <ul class="collection">
                         {% for token_id, token_name in tokens %}
                             <li class="collection-item">
-                                <span>{{ token_name }}</span>
+                                <span class="account-token-name">{{ token_name }}</span>
                                 <a href="{{ url_for("account_token_delete", token_id=token_id) }}"
                                    class="secondary-content">
                                     <i class="material-icons">delete</i>
@@ -37,7 +37,7 @@
                 {% endif %}
             </div>
             <div class="row">
-                <a class="btn right" href="{{ url_for('account_token') }}">Add API token</a>
+                <a id="user-token-add-btn" class="btn right" href="{{ url_for('account_token') }}">Add API token</a>
             </div>
         </div>
     </div>

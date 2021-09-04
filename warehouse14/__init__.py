@@ -103,7 +103,7 @@ def create_app(
         ]
         return render_template("account/account.html", tokens=token_list)
 
-    @app.route("/manage/account/token", methods=["GET", "POST"])
+    @app.route("/manage/account/tokens_form", methods=["GET", "POST"])
     @login_required
     def account_token():
         form = CreateAPITokenForm()
@@ -139,7 +139,7 @@ def create_app(
 
         return render_template("account/token.html", create_form=form)
 
-    @app.get("/manage/account/token/delete")
+    @app.get("/manage/account/tokens/delete")
     @login_required
     def account_token_delete():
         token_id = request.args.get("token_id")
@@ -203,7 +203,7 @@ def create_app(
             urls=urls,
         )
 
-    @app.route("/create_project", methods=["GET", "POST"])
+    @app.route("/projects_form", methods=["GET", "POST"])
     @login_required
     def create_project():
         if not check_project_creation_allowed():

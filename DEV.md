@@ -17,6 +17,38 @@ python run_local.py
 pygmentize -f html -S default>app/static/css/pygments.css
 ```
 
+## Test strategy
+
+### Test folder
+
+* tests/
+  * test_...  
+    unit tests for repositories and components might use local service mocks like `dynamodb.jar`
+    
+  * enpoints/  
+    use `requests_html` to test endpoints (mostly returning html)
+    
+  * integration/  
+    use `pyppeteer` to test UI flow and main user interaction
+
+### Where to test what?
+
+* Code units that can be tested isolated (might use local system like dynamodb_local or file system)  
+  -> `tests_...`
+
+* Writing endpoints that change entries in the backend or database  
+  -> `endpoints tests`
+
+* Read endpoints that render data as html  
+  -> `endpoints tests`
+  
+* Project creation flow  
+  -> `integration`
+
+* Infrastructure setup and health status of deployment  
+  -> Not tested  
+  (TODO provide script to check against a URL as smoke test)
+  
 ## API specs
 
 * [PEP 503 -- Simple Repository API](https://www.python.org/dev/peps/pep-0503/)
@@ -95,18 +127,18 @@ _: pk -> sk
 sk_gis: sk -> pk
 ```
 
-### Project Query
+#### Project Query
 ```
 query(sk=account#account1 & begins_with(PK, project#)) 
 & 
 query(sk=account#publicacc & begins_with(PK, project#))
 ```
 
-### Group Queries
+#### Group Queries
 - **get group projects**: `query[sk_gis](sk=group_key & pk startswith 'project#')`
 - **get group members**: `query[pk_gis](pk=group_key & sk startswith 'account#')`
 
-### Group Actions
+#### Group Actions
 - Add    Member to Group: 
   **get group projects**, write item for each project
 - Remove Member from Group
