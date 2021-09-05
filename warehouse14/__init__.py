@@ -17,7 +17,6 @@ from warehouse14 import simple_api
 from warehouse14.forms import CreateProjectForm, CreateAPITokenForm
 from warehouse14.login import OIDCAuthenticator, Authenticator, User
 from warehouse14.models import Project, Account, Token
-from warehouse14.pkg_helpers import guess_pkgname_and_version
 from warehouse14.repos import DBBackend
 from warehouse14.storage import SimpleFileStorage, PackageStorage
 
@@ -56,10 +55,10 @@ def create_app(
     @login_manager.user_loader
     def load_user(user_id):
         """Automatically creates a user for any OIDC login"""
-        account = db.account_get(user_id)
-        if account is None:
-            account = db.account_save(user_id)
-        return User(account) if account else None
+        _account = db.account_get(user_id)
+        if _account is None:
+            _account = db.account_save(user_id)
+        return User(_account) if _account else None
 
     auth.init_app(app)
 
