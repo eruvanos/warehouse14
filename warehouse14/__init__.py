@@ -241,6 +241,9 @@ def create_app(
             # Update fields
             project.public = form.public.data
 
+            # Save changes
+            db.project_save(project)
+
             return redirect(url_for("show_project", project_name=form.name.data))
         else:
             return render_template(

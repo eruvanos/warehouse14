@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.13 (unrelease)
+
+* fix project not updated
+
 ## 0.1.12
 - improve token information page
 - improved information for wrong token login
