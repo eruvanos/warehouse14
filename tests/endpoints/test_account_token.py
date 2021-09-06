@@ -48,7 +48,9 @@ def test_tokens_list(html_client, app, db):
 def test_tokens_add(html_client, app, db):
     login(html_client, "user1")
 
-    res: HTMLResponse = html_client.post("http://localhost/manage/account/tokens_form", data={"name": "token-2"})
+    res: HTMLResponse = html_client.post(
+        "http://localhost/manage/account/tokens_form", data={"name": "token-2"}
+    )
 
     assert res.status_code == 200
 
@@ -63,8 +65,7 @@ def test_tokens_remove(html_client, app, db):
     db.account_token_add("user1", "token-1", "token-1-name", "key")
 
     res: HTMLResponse = html_client.get(
-        "http://localhost/manage/account/tokens/delete",
-        params={"token_id": "token-1"}
+        "http://localhost/manage/account/tokens/delete", params={"token_id": "token-1"}
     )
 
     assert res.status_code == 200

@@ -37,13 +37,14 @@ class FlaskTestServer(Thread):
         end = time.perf_counter() + timeout
         while time.perf_counter() < end:
             try:
-                with socket.create_connection(("127.0.0.1", self.port), timeout=timeout):
+                with socket.create_connection(
+                    ("127.0.0.1", self.port), timeout=timeout
+                ):
                     break
             except OSError:
                 time.sleep(0.01)
         else:
             raise Exception("Timeout: Server not available")
-
 
     @staticmethod
     def _shutdown_server():

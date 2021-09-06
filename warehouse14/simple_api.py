@@ -72,8 +72,10 @@ def create_blueprint(
 
     @token_auth.error_handler
     def error_handler(status):
-        return ("Unauthorized: please create an API token using your account page. "
-                "Also check that you use '__token__' as username."), status
+        return (
+            "Unauthorized: please create an API token using your account page. "
+            "Also check that you use '__token__' as username."
+        ), status
 
     @token_auth.verify_password
     def verify_password(username, password):

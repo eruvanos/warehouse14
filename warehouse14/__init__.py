@@ -13,7 +13,7 @@ from flask import Flask, render_template, redirect, url_for, abort, request, fla
 from flask_login import LoginManager, login_required, current_user, logout_user
 from flaskext.markdown import Markdown
 
-from warehouse14 import simple_api
+from warehouse14 import simple_api, group_routes
 from warehouse14.forms import CreateProjectForm, CreateAPITokenForm
 from warehouse14.login import OIDCAuthenticator, Authenticator, User
 from warehouse14.models import Project, Account, Token
@@ -144,6 +144,8 @@ def create_app(
         token_id = request.args.get("token_id")
         db.account_token_delete(get_user_id(), token_id)
         return redirect(url_for("account"))
+
+    group_routes.add_routes(app, db)
 
     @app.get("/projects")
     @login_required

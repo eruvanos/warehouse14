@@ -1,7 +1,7 @@
 from abc import abstractmethod, ABC
 from typing import List, Optional
 
-from warehouse14.models import Project, Account, Token
+from warehouse14.models import Project, Account, Token, Group
 
 
 class DBBackend(ABC):
@@ -49,6 +49,39 @@ class DBBackend(ABC):
 
         :param token_id: Unique token id
         :return: user_id
+        """
+
+    # Group methods
+    @abstractmethod
+    def group_create(self, name: str, admins: List[str]) -> Group:
+        """
+        Create a new group.
+
+        :param name: Unique group name
+        :param admins: List of admins of the group
+        :return: Group
+        """
+
+    @abstractmethod
+    def group_get(self, name: str) -> Optional[Group]:
+        """
+        Get group by name.
+
+        :return: Group
+        """
+
+    @abstractmethod
+    def account_groups_list(self, user_id: str) -> List[str]:
+        """
+        List all group names a user belongs to.
+
+        :return: Names of Group
+        """
+
+    @abstractmethod
+    def group_delete(self, name: str):
+        """
+        Deletes a group
         """
 
     # Project methods

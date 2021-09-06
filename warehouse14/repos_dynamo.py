@@ -5,7 +5,7 @@ from typing import Optional, TYPE_CHECKING, List
 from boto3.dynamodb.conditions import Key
 
 from warehouse14 import Account, Token, Project
-from warehouse14.models import Version
+from warehouse14.models import Version, Group
 from warehouse14.repos import DBBackend
 
 if TYPE_CHECKING:
@@ -153,6 +153,71 @@ class DynamoDBBackend(DBBackend):
 
         account_id = items[0]["pk"].split("#")[1]
         return self.account_get(account_id)
+
+    # Group methods
+    def group_create(self, name: str, admins: List[str]) -> Group:
+        with self._table.batch_writer() as w:
+            w.put_item(
+                Item={
+                    "pk": f"group#{name}",
+                    "sk": f"group#{name}",
+                    "type": "GROUP",
+                    "name": name,
+                }
+            )
+            for admin in admins:
+                w.put_item(
+                    Item={
+                        "pk": f"group#{name}",
+                        "sk": f"account#{admin}",
+                        "type": "GROUP_ACCOUNT",
+                        "group": name,
+                        "account": admin,
+                        "role": "admin",
+                    }
+                )
+
+    def group_get(self, name: str) -> Optional[Group]:
+        items = self._query(
+            KeyConditionExpression=Key("pk").eq(f"group#{name}"),
+        )
+
+        group = None
+        admins = []
+        for item in items:
+            if item["type"] == "GROUP":
+                group = item
+            elif item["type"] == "GROUP_ACCOUNT":
+                role = item.get("role")
+                if role == "admin":
+                    admins.append(item["account"])
+
+        if group is None:
+            return None
+        else:
+            return Group(name=group["name"], admins=admins)
+
+    def account_groups_list(self, user_id: str) -> List[str]:
+        items = self._query(
+            IndexName=f"sk_gsi",
+            KeyConditionExpression=Key("sk").eq(f"account#{user_id}")
+            & Key("pk").begins_with("group#"),
+        )
+        return [item["group"] for item in items]
+
+    def group_delete(self, name: str):
+        with self._table.batch_writer() as w:
+            items = self._query(
+                KeyConditionExpression=Key("pk").eq(f"group#{name}"),
+            )
+
+            for item in items:
+                w.delete_item(
+                    Key={
+                        "pk": item["pk"],
+                        "sk": item["sk"],
+                    }
+                )
 
     # Project methods
     def project_save(self, project: Project) -> Project:

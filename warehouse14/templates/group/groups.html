@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% set active_page = 'groups' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <h1>Groups</h1>
+
+{#        {% if groups %}#}
+{#            <p class="important">#}
+{#                Click on a group to see the users#}
+{#            </p>#}
+
+{#            <div class="divider"></div>#}
+
+            <ul id="groups" class="collection">
+                {% for group in groups %}
+{#                    <a href="{{ url_for('show_group', name=group.name) }}"#}
+{#                       class="collection-item avatar group">#}
+{#                        <i class="material-icons medium circle">inbox</i>#}
+                        <span class="title group-name">{{ group }}</span>
+{#                    </a>#}
+                {% endfor %}
+            </ul>
+
+{#        {% else %}#}
+{#            <div class="">#}
+{#                {% if show_create %}#}
+{#                    <div class="card-panel grey lighten-3">#}
+{#                        <h6 class="">No groups visible for you, <a href="{{ url_for('create_group') }}">create</a>#}
+{#                            your#}
+{#                            own ones.</h6>#}
+{#                    </div>#}
+{#                {% else %}#}
+{#                    <div class="card-panel grey lighten-3">#}
+{#                        <h6 class="">No groups visible for you, in case you would like to create one, please contact your support.</h6>#}
+{#                    </div>#}
+{#                {% endif %}#}
+{#            </div>#}
+{#        {% endif %}#}
+
+
+{#        {% if show_create %}#}
+{#            <div class="fixed-action-btn">#}
+{#                <a#}
+{#                        id="create-group-btn"#}
+{#                        class="btn-floating btn-large waves-effect waves-light red"#}
+{#                        href="{{ url_for('create_group') }}"#}
+{#                ><i class="material-icons">add</i></a>#}
+{#            </div>#}
+{#        {% endif %}#}
+
+    </div>
+
+
+
+
+
+
+
+{% endblock %}

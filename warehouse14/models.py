@@ -103,6 +103,13 @@ class Account(BaseModel):
         return hashlib.sha256(name.encode()).hexdigest()
 
 
+class Group(BaseModel):
+    name: str
+    # created: datetime.datetime
+    # updated: datetime.datetime
+    admins: List[str] = []
+
+
 class Project(BaseModel):
     # Primary key
     def normalized_name(self) -> str:

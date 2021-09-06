@@ -43,10 +43,12 @@ async def get_texts(page: Page, selector: str) -> List[str]:
 
 
 async def click(page, selector):
-    await asyncio.wait([
-        page.click(selector),
-        page.waitForNavigation(),
-    ])
+    await asyncio.wait(
+        [
+            page.click(selector),
+            page.waitForNavigation(),
+        ]
+    )
 
 
 async def login(page: Page, server_url, username):

@@ -56,8 +56,8 @@ def test_project_page_shows_details(html_client, app, db, storage):
 
     assert res.status_code == 200, res.text
     assert (
-            f"pip install --extra-index-url http://localhost/simple/ {project.name}"
-            in res.html.find(".nav-content", first=True).text
+        f"pip install --extra-index-url http://localhost/simple/ {project.name}"
+        in res.html.find(".nav-content", first=True).text
     )
 
 
@@ -81,11 +81,7 @@ def test_project_form_creates_project(html_client, app, db, storage):
     with captured_templates(app) as records:
         res: HTMLResponse = html_client.post(
             f"http://localhost/projects_form",
-            data={
-                "name": "test-project",
-                "public": True,
-                "csrf_token": csrf_token
-            }
+            data={"name": "test-project", "public": True, "csrf_token": csrf_token},
         )
 
     assert res.status_code == 200, res.text
@@ -102,7 +98,9 @@ def test_project_edit_returns_form_template(html_client, app, db, storage):
     project = given_project_with_file(db, storage, admins=["user1"])
 
     with captured_templates(app) as records:
-        res: HTMLResponse = html_client.get(f"http://localhost/projects/{project.name}/edit")
+        res: HTMLResponse = html_client.get(
+            f"http://localhost/projects/{project.name}/edit"
+        )
 
     assert res.status_code == 200, res.text
 
@@ -120,10 +118,8 @@ def test_project_edit_updates_project(html_client, app, db, storage):
     with captured_templates(app) as records:
         res: HTMLResponse = html_client.post(
             f"http://localhost/projects/{project.name}/edit",
-            data={
-                "public": True,
-                "csrf_token": csrf_token
-            })
+            data={"public": True, "csrf_token": csrf_token},
+        )
 
     assert res.status_code == 200, res.text
 

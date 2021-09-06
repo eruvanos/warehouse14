@@ -9,29 +9,41 @@ For login, a simple formfield is provided.
 python run_local.py
 ```
 
-
-## Commands
+## Important Commands
 
 ### Generate code highlighting
 ```
 pygmentize -f html -S default>app/static/css/pygments.css
 ```
+  
+## Implementation details
 
-## Test strategy
+### Project structure
 
-### Test folder
+* warehouse14/  
+  **main package**
+  * **templates/**
+    Jinja templates
+    * **account**
+    * **project**
+    * **group**
+    * **simple**
 
-* tests/
-  * test_...  
+### Test strategy
+
+#### Test folder
+
+* **tests/**
+  * **test_...**  
     unit tests for repositories and components might use local service mocks like `dynamodb.jar`
     
-  * enpoints/  
+  * **enpoints/**  
     use `requests_html` to test endpoints (mostly returning html)
     
-  * integration/  
+  * **integration/**  
     use `pyppeteer` to test UI flow and main user interaction
 
-### Where to test what?
+#### Where to test what?
 
 * Code units that can be tested isolated (might use local system like dynamodb_local or file system)  
   -> `tests_...`
@@ -48,33 +60,6 @@ pygmentize -f html -S default>app/static/css/pygments.css
 * Infrastructure setup and health status of deployment  
   -> Not tested  
   (TODO provide script to check against a URL as smoke test)
-  
-## API specs
-
-* [PEP 503 -- Simple Repository API](https://www.python.org/dev/peps/pep-0503/)
-* [PEP 508 -- Dependency specification for Python Software Packages](https://www.python.org/dev/peps/pep-0508/)
-* [Upload API](https://warehouse.pypa.io/api-reference/legacy.html#upload-api)
-* [PEP 427 -- The Wheel Binary Package Format 1.0](https://www.python.org/dev/peps/pep-0427/#file-name-convention)
-* [PEP 423 -- Naming conventions and recipes related to packaging](https://www.python.org/dev/peps/pep-0423/)
-* [PEP 517 -- A build-system independent format for source trees](https://www.python.org/dev/peps/pep-0517/)
-* [PEP 241 -- Metadata for Python Software Packages](https://www.python.org/dev/peps/pep-0241/)
-* [PEP 314 -- Metadata for Python Software Packages 1.1](https://www.python.org/dev/peps/pep-0314/)
-* [PEP 345 -- Metadata for Python Software Packages 1.2](https://www.python.org/dev/peps/pep-0345/)
-* [PEP 426 -- Metadata for Python Software Packages 2.0](https://www.python.org/dev/peps/pep-0426/)
-* [PEP 566 -- Metadata for Python Software Packages 2.1](https://www.python.org/dev/peps/pep-0566/)
-
-### Package names
-The current Python packaging landscape is full of historical grown specifications (PEP) and implementation details
-of the former PyPI (Cheese shop). In the following sections some design decisions will be explained.
-
-The allowed characters for a package name are defined in [PEP 508](https://www.python.org/dev/peps/pep-0508/#names)
-which are ....
-The simple API normalizes package following [PEP 503](https://www.python.org/dev/peps/pep-0503/#normalized-names) `re.sub(r"[-_.]+", "-", name).lower()`
-
-For that reason `example-pkg`, `example.pkg`, `example+pkg` and `pkg_example` are the same. 
-
-## Implementation details
-
 
 ### Security
 
@@ -108,9 +93,14 @@ project#project1                 account#public                         {role: m
 project#project2                 account#account1                       {role: admin}
 
 # Group                                                                           
+group#group1                     group#group1                           {type:GROUP, name, }
+
+group#group1                     account#account1                       {type:GROUP_ACCOUNT, role: admin}
+group#group1                     account#account2                       {type:GROUP_ACCOUNT, role: member}
+
+// group project connection
 project#project1                 group#group1                           {role: member}
-group#group1                     account#account1                       {role: admin}
-group#group1                     account#account2                       {role: member}
+
 // Permission per account for project
 project#project1#group#group1    account#account1                       {role: member}
 
@@ -124,7 +114,7 @@ project#project1                 version#0.0.1#                          {role: 
 
 # Glocbal Secondary Index:
 _: pk -> sk
-sk_gis: sk -> pk
+sk_gsi: sk -> pk
 ```
 
 #### Project Query
@@ -151,3 +141,26 @@ query(sk=account#publicacc & begins_with(PK, project#))
   **get group members**, update item for each member
 ```
 
+## API specs
+
+* [PEP 503 -- Simple Repository API](https://www.python.org/dev/peps/pep-0503/)
+* [PEP 508 -- Dependency specification for Python Software Packages](https://www.python.org/dev/peps/pep-0508/)
+* [Upload API](https://warehouse.pypa.io/api-reference/legacy.html#upload-api)
+* [PEP 427 -- The Wheel Binary Package Format 1.0](https://www.python.org/dev/peps/pep-0427/#file-name-convention)
+* [PEP 423 -- Naming conventions and recipes related to packaging](https://www.python.org/dev/peps/pep-0423/)
+* [PEP 517 -- A build-system independent format for source trees](https://www.python.org/dev/peps/pep-0517/)
+* [PEP 241 -- Metadata for Python Software Packages](https://www.python.org/dev/peps/pep-0241/)
+* [PEP 314 -- Metadata for Python Software Packages 1.1](https://www.python.org/dev/peps/pep-0314/)
+* [PEP 345 -- Metadata for Python Software Packages 1.2](https://www.python.org/dev/peps/pep-0345/)
+* [PEP 426 -- Metadata for Python Software Packages 2.0](https://www.python.org/dev/peps/pep-0426/)
+* [PEP 566 -- Metadata for Python Software Packages 2.1](https://www.python.org/dev/peps/pep-0566/)
+
+### Package names
+The current Python packaging landscape is full of historical grown specifications (PEP) and implementation details
+of the former PyPI (Cheese shop). In the following sections some design decisions will be explained.
+
+The allowed characters for a package name are defined in [PEP 508](https://www.python.org/dev/peps/pep-0508/#names)
+which are ....
+The simple API normalizes package following [PEP 503](https://www.python.org/dev/peps/pep-0503/#normalized-names) `re.sub(r"[-_.]+", "-", name).lower()`
+
+For that reason `example-pkg`, `example.pkg`, `example+pkg` and `pkg_example` are the same. 
