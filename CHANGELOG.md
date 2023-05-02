@@ -1,6 +1,16 @@
 # Changelog
+           
 
-## 0.1.13 (unrelease)
+## 0.2.0
+
+* bump pydantic from 1.8.2 to 1.10.7 
+* bump requests from 2.26.0 to 2.29.0 
+* bump pyppeteer from 0.2.6 to 1.0.2
+* bump flask-login from 0.5.0 to 0.6.2
+* bump flask-wtf from 0.15.1 to 1.1.1
+* bump authlib from 0.15.4 to 1.2.0
+
+## 0.1.13
 
 * fix project not updated
 
