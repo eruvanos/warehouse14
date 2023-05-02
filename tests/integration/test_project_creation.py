@@ -23,8 +23,8 @@ def server(tmpdir, db, storage, authenticator):
     server.shutdown_server()
 
 
-@pytest.mark.asyncio
 @pytest.mark.integration
+@pytest.mark.asyncio
 async def test_title(server, authenticator, page):
     await login(page, server.url, "user1")
 

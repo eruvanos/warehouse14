@@ -99,7 +99,7 @@ def create_blueprint(
             for tk in db.account_token_list(account.name):
                 if tk.id == token.identifier:
                     # delay test to check for specific project access
-                    token.check(key=tk.key, project="")
+                    token.check(key=tk.key)
 
                     # Store token for later
                     g.token = token

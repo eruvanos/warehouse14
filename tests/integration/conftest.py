@@ -2,7 +2,7 @@ from uuid import uuid4
 
 import boto3
 import pytest
-from moto import mock_dynamodb2, mock_s3
+from moto import mock_dynamodb, mock_s3
 
 from tests.local_login import MockAuthenticator
 from warehouse14 import DBBackend, PackageStorage
@@ -27,7 +27,7 @@ def table():
     """Pytest fixture that creates the table in
     the fake moto AWS account
     """
-    with mock_dynamodb2():
+    with mock_dynamodb():
         dynamodb = boto3.resource("dynamodb", region_name="us-east-1")
         yield dynamodb.create_table(
             TableName=str(uuid4()),

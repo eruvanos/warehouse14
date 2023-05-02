@@ -1,6 +1,7 @@
 import os
 import shutil
 import tarfile
+from pathlib import Path
 from uuid import uuid4
 
 import boto3
@@ -105,6 +106,17 @@ class LocalDynamoDB:
         else:
             self._download_dynamodb()
 
+    def _download_file(self, url: str, local_filename: Path) -> Path:
+        with requests.get(url, stream=True) as r:
+            r.raise_for_status()
+            with local_filename.open("wb") as f:
+                for chunk in r.iter_content(chunk_size=8192):
+                    # If you have chunk encoded response uncomment if
+                    # and set chunk_size parameter to None.
+                    # if chunk:
+                    f.write(chunk)
+        return local_filename
+
     def _download_dynamodb(self):
         print(f'Download dynamodb local to "{self._path}"')
 
@@ -112,30 +124,32 @@ class LocalDynamoDB:
             print(f'Clean "{self._path}"')
             shutil.rmtree(self._path)
 
-        with requests.get(LATEST_URL, stream=True) as r:
-            r.raise_for_status()
+        download = Path(self._path) / "download"
+        download.mkdir(parents=True)
 
-            with tarfile.open(fileobj=r.raw, mode="r:gz") as tar:
-                def is_within_directory(directory, target):
-                    
-                    abs_directory = os.path.abspath(directory)
-                    abs_target = os.path.abspath(target)
-                
-                    prefix = os.path.commonprefix([abs_directory, abs_target])
-                    
-                    return prefix == abs_directory
-                
-                def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
-                
-                    for member in tar.getmembers():
-                        member_path = os.path.join(path, member.name)
-                        if not is_within_directory(path, member_path):
-                            raise Exception("Attempted Path Traversal in Tar File")
-                
-                    tar.extractall(path, members, numeric_owner=numeric_owner) 
-                    
-                
-                safe_extract(tar, self._path)
+        local_file = self._download_file(LATEST_URL, download / "dynamodb_local_latest.tar.gz")
+
+        with tarfile.open(name=local_file, mode="r:gz") as tar:
+            def is_within_directory(directory, target):
+
+                abs_directory = os.path.abspath(directory)
+                abs_target = os.path.abspath(target)
+
+                prefix = os.path.commonprefix([abs_directory, abs_target])
+
+                return prefix == abs_directory
+
+            def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
+
+                for member in tar.getmembers():
+                    member_path = os.path.join(path, member.name)
+                    if not is_within_directory(path, member_path):
+                        raise Exception("Attempted Path Traversal in Tar File")
+
+                tar.extractall(path, members, numeric_owner=numeric_owner)
+
+
+            safe_extract(tar, self._path)
 
         for p in os.listdir(self._path):
             print(p)

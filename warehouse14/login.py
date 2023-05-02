@@ -1,13 +1,13 @@
+import urllib
 from abc import ABCMeta, abstractmethod
 from typing import Dict
 from urllib.parse import urlencode
 
 import flask_login
-from authlib.integrations.base_client.base_oauth import OAUTH_CLIENT_PARAMS
-from authlib.integrations.flask_client import OAuth, FlaskRemoteApp
+from authlib.integrations.base_client.registry import OAUTH_CLIENT_PARAMS
+from authlib.integrations.flask_client import OAuth
 from flask import Flask, url_for, session, redirect, request, Response
 from flask_login import UserMixin
-from werkzeug.urls import url_parse
 
 from warehouse14.models import Account
 
@@ -76,8 +76,8 @@ class OIDCAuthenticator(Authenticator):
             )
 
     def logout(self) -> Response:
-        url = url_parse(request.url)
-        logout_url = url_parse(
+        url = urllib.parse.urlsplit(request.url)
+        logout_url = urllib.parse.urlsplit(
             self.oauth.oidc.load_server_metadata().get("end_session_endpoint")
         )
         logout_url = logout_url._replace(
@@ -90,7 +90,7 @@ class OIDCAuthenticator(Authenticator):
         session["next"] = request.url
 
         redirect_uri = url_for("_auth", _external=True)
-        oidc: FlaskRemoteApp = self.oauth.oidc
+        oidc = self.oauth.oidc
         return oidc.authorize_redirect(redirect_uri)
 
     def _auth(self):
