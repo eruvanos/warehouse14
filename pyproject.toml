@@ -39,7 +39,7 @@ Flask-WTF = "^0.15.1"
 requests = "^2.25.1"
 
 [tool.poetry.dev-dependencies]
-pyppeteer = "^0.2.5"
+pyppeteer = "^1.0.2"
 pytest = "^6.2.4"
 pytest-asyncio = "^0.15.1"
 mirakuru = "^2.4.1"
