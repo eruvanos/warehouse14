@@ -44,21 +44,18 @@ tests-no-zope = ["coverage[toml] (>=5.0.2)", "hypothesis", "mypy", "pympler", "p
 
 [[package]]
 name = "authlib"
-version = "0.15.4"
-description = "The ultimate Python library in building OAuth and OpenID Connect servers."
+version = "1.2.0"
+description = "The ultimate Python library in building OAuth and OpenID Connect servers and clients."
 category = "main"
 optional = false
 python-versions = "*"
 files = [
-    {file = "Authlib-0.15.4-py2.py3-none-any.whl", hash = "sha256:d9fe5edb59801b16583faa86f88d798d99d952979b9616d5c735b9170b41ae2c"},
-    {file = "Authlib-0.15.4.tar.gz", hash = "sha256:37df3a2554bc6fe0da3cc6848c44fac2ae40634a7f8fc72543947f4330b26464"},
+    {file = "Authlib-1.2.0-py2.py3-none-any.whl", hash = "sha256:4ddf4fd6cfa75c9a460b361d4bd9dac71ffda0be879dbe4292a02e92349ad55a"},
+    {file = "Authlib-1.2.0.tar.gz", hash = "sha256:4fa3e80883a5915ef9f5bc28630564bc4ed5b5af39812a3ff130ec76bd631e9d"},
 ]
 
 [package.dependencies]
-cryptography = "*"
-
-[package.extras]
-client = ["requests"]
+cryptography = ">=3.2"
 
 [[package]]
 name = "beautifulsoup4"
@@ -2190,4 +2187,4 @@ aws = []
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "4e9bf6989cb7a0c12afc672284f66cb00939e0567ccca16e3b4b88749f74b869"
+content-hash = "4036f93902335f1d0fd4810eeaa2c4e66d1e159a91bc3455e54e663e616fddbb"
