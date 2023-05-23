@@ -3,6 +3,13 @@
 [![Unit Tests](https://github.com/eruvanos/warehouse14/actions/workflows/python-unittests.yml/badge.svg)](https://github.com/eruvanos/warehouse14/actions/workflows/python-unittests.yml)
 [![Integration Tests](https://github.com/eruvanos/warehouse14/actions/workflows/python-integration.yml/badge.svg)](https://github.com/eruvanos/warehouse14/actions/workflows/python-integration.yml)
 
+> The project currently on hold. 
+> Right now I focus my free time on other projects like [Arcade](https://github.com/pythonarcade/arcade).
+> 
+> Due to some issues with integration test and general outdated deps, it requires more work to remove the dust from this project.
+> In addition the css library just got an [alpha release](https://github.com/materializecss/materialize) so it makes sense to postpone
+> any update to a later point in time. 
+
 # Warehouse14
 
 While the PyPI (Warehouse) provides a global package index for all Python users, companies and closed groups do have the
