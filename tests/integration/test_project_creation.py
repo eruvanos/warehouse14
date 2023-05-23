@@ -1,3 +1,5 @@
+import asyncio
+
 import pytest
 
 from tests.integration import login, get_texts, click
@@ -30,12 +32,13 @@ async def test_title(server, authenticator, page):
 
     await page.goto(server.url)
 
+
     title = await page.title()
     assert title == "Warehouse14"
 
 
-@pytest.mark.asyncio
 @pytest.mark.integration
+@pytest.mark.asyncio
 async def test_manage_project(server, authenticator, page):
     # Open product page
     await login(page, server.url, "user1")
@@ -46,10 +49,12 @@ async def test_manage_project(server, authenticator, page):
     await click(page, "#create-project-btn")
 
     # Enter name
+    await page.screenshot()
     await page.type("#name", "ExampleProject")
 
     # Submit
     await click(page, "button[type='submit']")
+    await page.screenshot()
 
     # Assert we are on product page, edit button is available, no content
     assert "projects/exampleproject" in page.url
