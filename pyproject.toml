@@ -47,7 +47,7 @@ requests-html = "^0.10.0"
 moto = "^4.1.10"
 freezegun = "^1.2.2"
 black = "^23.3.0"
-boto3 = "^1.26.142"
+boto3 = "^1.26.146"
 requests-wsgi-adapter = "^0.4.1"
 boto3-stubs = {extras = ["s3", "dynamodb"], version = "^1.26.142"}
 coverage = "^7.2.6"
