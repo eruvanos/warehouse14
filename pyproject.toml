@@ -50,7 +50,7 @@ black = "^23.3.0"
 boto3 = "^1.26.146"
 requests-wsgi-adapter = "^0.4.1"
 boto3-stubs = {extras = ["s3", "dynamodb"], version = "^1.26.142"}
-coverage = "^7.2.6"
+coverage = "^7.2.7"
 blinker = "^1.6.2"
 
 [tool.poetry.extras]
