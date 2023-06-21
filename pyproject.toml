@@ -49,7 +49,7 @@ freezegun = "^1.2.2"
 black = "^23.3.0"
 boto3 = "^1.26.152"
 requests-wsgi-adapter = "^0.4.1"
-boto3-stubs = {extras = ["s3", "dynamodb"], version = "^1.26.151"}
+boto3-stubs = {extras = ["s3", "dynamodb"], version = "^1.26.157"}
 coverage = "^7.2.7"
 blinker = "^1.6.2"
 
