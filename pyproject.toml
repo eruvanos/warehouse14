@@ -34,7 +34,7 @@ authlib = "^1.2.0"
 pypitoken = "^6.0.3"
 readme-renderer = {extras = ["md"], version = ">=37.3,<41.0"}
 flask-markdown = "^0.3"
-pydantic = "^1.8.2"
+pydantic = ">=1.8.2,<3.0.0"
 flask-wtf = "^1.1.1"
 requests = "^2.25.1"
 
