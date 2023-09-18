@@ -32,7 +32,7 @@ flask-login = "^0.6.2"
 flask-httpauth = "^4.4.0"
 authlib = "^1.2.0"
 pypitoken = ">=6.0.3,<8.0.0"
-readme-renderer = {extras = ["md"], version = ">=37.3,<42.0"}
+readme-renderer = {extras = ["md"], version = ">=37.3,<43.0"}
 flask-markdown = "^0.3"
 pydantic = ">=1.8.2,<3.0.0"
 flask-wtf = "^1.1.1"
