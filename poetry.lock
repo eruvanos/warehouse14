@@ -1831,13 +1831,13 @@ tests = ["hypothesis (>=3.27.0)", "pytest (>=3.2.1,!=3.3.0)"]
 
 [[package]]
 name = "pypitoken"
-version = "7.0.0"
+version = "7.0.1"
 description = "Manipulate PyPI API tokens"
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "pypitoken-7.0.0-py3-none-any.whl", hash = "sha256:5ed425211a9bc83168ed417ffcf8ac7bc935d5a8385e7e61d5478dd6712da084"},
-    {file = "pypitoken-7.0.0.tar.gz", hash = "sha256:a41b8fdec0171e0e8d67bf9566893d960915dfd5a382a62d0b52f421ff8a9a88"},
+    {file = "pypitoken-7.0.1-py3-none-any.whl", hash = "sha256:f2966cc4c6f2ef9edeaa3a3e49febf748ff561c7acbdba911845998b2a6c8e16"},
+    {file = "pypitoken-7.0.1.tar.gz", hash = "sha256:dd90c8c1abb792b1de7f8380dccbaea238a1bd80e2231be8f5c527ed5ae510a2"},
 ]
 
 [package.dependencies]
