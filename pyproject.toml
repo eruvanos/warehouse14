@@ -41,7 +41,7 @@ requests = "^2.25.1"
 [tool.poetry.dev-dependencies]
 pyppeteer = "^1.0.2"
 pytest = "^7.4.4"
-pytest-asyncio = "^0.23.2"
+pytest-asyncio = "^0.23.3"
 mirakuru = "^2.5.2"
 requests-html = "^0.10.0"
 moto = "^4.2.12"
