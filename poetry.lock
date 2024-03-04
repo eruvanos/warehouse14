@@ -2032,13 +2032,13 @@ files = [
 
 [[package]]
 name = "readme-renderer"
-version = "42.0"
+version = "43.0"
 description = "readme_renderer is a library for rendering readme descriptions for Warehouse"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "readme_renderer-42.0-py3-none-any.whl", hash = "sha256:13d039515c1f24de668e2c93f2e877b9dbe6c6c32328b90a40a49d8b2b85f36d"},
-    {file = "readme_renderer-42.0.tar.gz", hash = "sha256:2d55489f83be4992fe4454939d1a051c33edbab778e82761d060c9fc6b308cd1"},
+    {file = "readme_renderer-43.0-py3-none-any.whl", hash = "sha256:19db308d86ecd60e5affa3b2a98f017af384678c63c88e5d4556a380e674f3f9"},
+    {file = "readme_renderer-43.0.tar.gz", hash = "sha256:1818dd28140813509eeed8d62687f7cd4f7bad90d4db586001c5dc09d4fde311"},
 ]
 
 [package.dependencies]
@@ -2415,4 +2415,4 @@ aws = []
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "18b1063b7737f5ae3ae556a2f02c190d366fb21ed024f56c8585e124f0498baa"
+content-hash = "ddb92dc037f65dd0675cd1b080c220c6139e5c625eb48a10acd5880081984651"
