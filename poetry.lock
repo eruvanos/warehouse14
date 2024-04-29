@@ -1128,13 +1128,13 @@ email = ["email-validator"]
 
 [[package]]
 name = "freezegun"
-version = "1.4.0"
+version = "1.5.0"
 description = "Let your Python tests travel through time"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "freezegun-1.4.0-py3-none-any.whl", hash = "sha256:55e0fc3c84ebf0a96a5aa23ff8b53d70246479e9a68863f1fcac5a3e52f19dd6"},
-    {file = "freezegun-1.4.0.tar.gz", hash = "sha256:10939b0ba0ff5adaecf3b06a5c2f73071d9678e507c5eaedb23c761d56ac774b"},
+    {file = "freezegun-1.5.0-py3-none-any.whl", hash = "sha256:ec3f4ba030e34eb6cf7e1e257308aee2c60c3d038ff35996d7475760c9ff3719"},
+    {file = "freezegun-1.5.0.tar.gz", hash = "sha256:200a64359b363aa3653d8aac289584078386c7c3da77339d257e46a01fb5c77c"},
 ]
 
 [package.dependencies]
@@ -2420,4 +2420,4 @@ aws = []
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "b9472e0bd449424d998945005182cb366e7d0ceeb6f6c9a6ae4d528e1cc48a92"
+content-hash = "4965e6bd70ead02037543344f07e5ea372f87549f0dbee0203b0f3184e3514f0"
