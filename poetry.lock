@@ -153,13 +153,13 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "boto3-stubs"
-version = "1.35.39"
-description = "Type annotations for boto3 1.35.39 generated with mypy-boto3-builder 8.1.2"
+version = "1.35.44"
+description = "Type annotations for boto3 1.35.44 generated with mypy-boto3-builder 8.1.2"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "boto3_stubs-1.35.39-py3-none-any.whl", hash = "sha256:b977a4282852ed3206749ab7dbfe4e03ac560a70fa9e2d79ec558bccfcc6c629"},
-    {file = "boto3_stubs-1.35.39.tar.gz", hash = "sha256:6a0f4d38fb38d3dd96a1cefeda356b5ac5717cda314b24493ea527899dffb235"},
+    {file = "boto3_stubs-1.35.44-py3-none-any.whl", hash = "sha256:03b8f717692e85003539135c5553c3d8591c2475f9c9860e4e0b8a139c94b5ff"},
+    {file = "boto3_stubs-1.35.44.tar.gz", hash = "sha256:8268c64f6480d9cdd9fcc01082ea5bea96a33e5967ee23d90dcbd3153ec9ffe6"},
 ]
 
 [package.dependencies]
@@ -212,7 +212,7 @@ bedrock-agent = ["mypy-boto3-bedrock-agent (>=1.35.0,<1.36.0)"]
 bedrock-agent-runtime = ["mypy-boto3-bedrock-agent-runtime (>=1.35.0,<1.36.0)"]
 bedrock-runtime = ["mypy-boto3-bedrock-runtime (>=1.35.0,<1.36.0)"]
 billingconductor = ["mypy-boto3-billingconductor (>=1.35.0,<1.36.0)"]
-boto3 = ["boto3 (==1.35.39)", "botocore (==1.35.39)"]
+boto3 = ["boto3 (==1.35.44)", "botocore (==1.35.44)"]
 braket = ["mypy-boto3-braket (>=1.35.0,<1.36.0)"]
 budgets = ["mypy-boto3-budgets (>=1.35.0,<1.36.0)"]
 ce = ["mypy-boto3-ce (>=1.35.0,<1.36.0)"]
@@ -2456,4 +2456,4 @@ aws = []
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "31555b7b5799ad02d7aeb94ca15f483dabdc0345e233d25d20fbd3f54411b094"
+content-hash = "5f6fc797ba89c131e59958b371ee4b8a6dd93f9a94805855fb496d959f9289ca"
