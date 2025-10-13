@@ -54,7 +54,7 @@ boto3 = "^1.37.38"
 requests-wsgi-adapter = "^0.4.1"
 boto3-stubs = {extras = ["s3", "dynamodb"], version = "^1.40.45"}
 coverage = "^7.10.7"
-blinker = "^1.8.2"
+blinker = "^1.9.0"
 
 [tool.poetry.extras]
 aws = ["boto3"]
