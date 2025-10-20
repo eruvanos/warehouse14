@@ -1561,14 +1561,14 @@ files = [
 
 [[package]]
 name = "mirakuru"
-version = "2.5.2"
+version = "2.6.1"
 description = "Process executor (not only) for tests."
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.9"
 groups = ["dev"]
 files = [
-    {file = "mirakuru-2.5.2-py3-none-any.whl", hash = "sha256:90c2d90a8cf14349b2f33e6db30a16acd855499811e0312e56cf80ceacf2d3e5"},
-    {file = "mirakuru-2.5.2.tar.gz", hash = "sha256:41ca583d355eb7a6cfdc21c1aea549979d685c27b57239b88725434f115a7132"},
+    {file = "mirakuru-2.6.1-py3-none-any.whl", hash = "sha256:4be0bfd270744454fa0c0466b8127b66bd55f4decaf05bbee9b071f2acbd9473"},
+    {file = "mirakuru-2.6.1.tar.gz", hash = "sha256:95d4f5a5ad406a625e9ca418f20f8e09386a35dad1ea30fd9073e0ae93f712c7"},
 ]
 
 [package.dependencies]
@@ -2667,4 +2667,4 @@ aws = []
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.8"
-content-hash = "88718cddb41dee7da2050a97d880729b47230a7e0398dfa5af51ee072b1fd086"
+content-hash = "983f24ed7d6adfa40ffb8c067ade9aeaa3037f1e841d3fae83a939f2b2fc91dd"
