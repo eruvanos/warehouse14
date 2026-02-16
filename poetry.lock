@@ -156,18 +156,18 @@ files = [
 
 [[package]]
 name = "boto3"
-version = "1.42.34"
+version = "1.42.49"
 description = "The AWS SDK for Python"
 optional = false
 python-versions = ">=3.9"
 groups = ["dev"]
 files = [
-    {file = "boto3-1.42.34-py3-none-any.whl", hash = "sha256:db3fb539e3f806b911ec4ca991f2f8bff333c5f0b87132a82e28b521fc5ec164"},
-    {file = "boto3-1.42.34.tar.gz", hash = "sha256:75d7443c81a029283442fad138629be1eefaa3e6d430c28118a0f4cdbd57855d"},
+    {file = "boto3-1.42.49-py3-none-any.whl", hash = "sha256:99e1df4361c3f6ff6ade65803c043ea96314826134962dd3b385433b309eb819"},
+    {file = "boto3-1.42.49.tar.gz", hash = "sha256:9cd252f640567b86e92b0a8ffdd4ade9a3018ee357c724bff6a21b8c8a41be0c"},
 ]
 
 [package.dependencies]
-botocore = ">=1.42.34,<1.43.0"
+botocore = ">=1.42.49,<1.43.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.16.0,<0.17.0"
 
@@ -615,14 +615,14 @@ xray = ["mypy-boto3-xray (>=1.42.0,<1.43.0)"]
 
 [[package]]
 name = "botocore"
-version = "1.42.34"
+version = "1.42.49"
 description = "Low-level, data-driven core of boto 3."
 optional = false
 python-versions = ">=3.9"
 groups = ["dev"]
 files = [
-    {file = "botocore-1.42.34-py3-none-any.whl", hash = "sha256:94099b5d09d0c4bfa6414fb3cffd54275ce6e51d7ba016f17a0e79f9274f68f7"},
-    {file = "botocore-1.42.34.tar.gz", hash = "sha256:92e44747da7890270d8dcc494ecc61fc315438440c55e00dc37a57d402b1bb66"},
+    {file = "botocore-1.42.49-py3-none-any.whl", hash = "sha256:1c33544f72101eed4ccf903ebb667a803e14e25b2af4e0836e4b871da1c0af37"},
+    {file = "botocore-1.42.49.tar.gz", hash = "sha256:333115a64a507697b0c450ade7e2d82bc8b4e21c0051542514532b455712bdcc"},
 ]
 
 [package.dependencies]
@@ -634,7 +634,7 @@ urllib3 = [
 ]
 
 [package.extras]
-crt = ["awscrt (==0.29.2)"]
+crt = ["awscrt (==0.31.2)"]
 
 [[package]]
 name = "botocore-stubs"
@@ -2712,4 +2712,4 @@ aws = []
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.8"
-content-hash = "9d73b6821805413603977ce40ed21acbf61911c69e264eabccbe4fa3033145fc"
+content-hash = "34de1e5aceeba7228c111cf0943559b2100b10da7b454a832ad95eb8ac9f889f"
